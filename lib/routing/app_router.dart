@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trammageddon/routing/guards/auth_guard.dart';
 import 'package:trammageddon/routing/route_names.dart';
-import 'package:trammageddon/screens/login/login_screen.dart';
+import 'package:trammageddon/screens/add_incident/add_incident.screen.dart';
+import 'package:trammageddon/screens/login/login.screen.dart';
 
 class AppRouter {
   final AuthGuard authGuard;
@@ -44,6 +45,16 @@ class AppRouter {
         ),
       ),
 
+      GoRoute(
+        path: RouteNames.addIncident,
+        name: 'addIncident',
+        pageBuilder: (context, state) => _buildBrutalistPageTransition(
+          context: context,
+          state: state,
+          child: const AddIncidentScreen(),
+        ),
+      ),
+
       // TODO: Add home route when home screen is created
       // GoRoute(
       //   path: RouteNames.home,
@@ -73,9 +84,7 @@ class AppRouter {
       context: context,
       state: state,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('BŁĄD'),
-        ),
+        appBar: AppBar(title: const Text('BŁĄD')),
         body: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,

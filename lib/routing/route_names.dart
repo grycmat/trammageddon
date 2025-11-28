@@ -4,6 +4,7 @@ class RouteNames {
   static const String login = '/login';
   static const String home = '/';
   static const String error = '/error';
+  static const String addIncident = '/add-incident';
 
   // Future routes (examples)
   static const String profile = '/profile';
