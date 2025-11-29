@@ -28,11 +28,13 @@ Trammageddon is a Flutter mobile application for reporting and tracking tram (pu
 
 ### Project Structure
 - `lib/main.dart` - Entry point, defines `Trammageddon` root widget with router setup
+- `lib/layout/` - Layout wrappers
+  - `scaffold_with_nav.dart` - Scaffold wrapper providing persistent bottom navigation
 - `lib/screens/` - Screen-level widgets organized by feature
   - `login/` - Login screen
   - `add_incident/` - Incident reporting screen and related widgets (wanted_border, statement_frame, category_tag, app_dropdown, app_text_area)
   - `dashboard/` - Dashboard screen with data visualization (data_box, top_ranking_item)
-  - `hall_of_defame/` - Hall of shame/rankings screen with detailed entries
+  - `hall_of_defame/` - Hall of defame/rankings screen with detailed entries
 - `lib/widgets/` - Reusable UI components
   - `verification_frame.dart` - Bordered container for forms
   - `stamped_button.dart` - Custom styled button component
@@ -43,7 +45,7 @@ Trammageddon is a Flutter mobile application for reporting and tracking tram (pu
   - `theme.dart` - Defines `AppTheme` with dark and light themes
   - `colors.dart` - Centralized color palette in `AppColors`
 - `lib/routing/` - Navigation configuration
-  - `app_router.dart` - GoRouter setup with brutalist page transitions
+  - `app_router.dart` - GoRouter setup with ShellRoute for persistent navigation and brutalist page transitions
   - `route_names.dart` - Centralized route path constants
   - `guards/auth_guard.dart` - Authentication state manager
 - `lib/model/` - Data models
@@ -54,7 +56,8 @@ The app uses `go_router` for declarative routing with authentication guards:
 - `AppRouter` configured in `main.dart` with `AuthGuard` integration
 - `AuthGuard` extends `ChangeNotifier` to trigger route refreshes on auth state changes
 - Authentication guards currently commented out during development
-- Custom brutalist page transitions: sharp cut at 50% animation progress (no fade, instant switch)
+- Uses `ShellRoute` pattern with `ScaffoldWithNav` to provide persistent bottom navigation across all screens
+- Custom brutalist page transitions: sharp cut at 50% animation progress (no fade, instant switch) via `CustomTransitionPage`
 - Initial route is `/` (home/dashboard)
 - Routes defined in `RouteNames`:
   - `/login` - Login screen
@@ -90,6 +93,13 @@ Visual style characteristics:
 
 ### State Management
 Currently using basic StatefulWidget for local state. No global state management library is integrated.
+
+### Backend Integration
+The app is configured to use Firebase:
+- Firebase Core for initialization
+- Cloud Firestore for data persistence
+- Environment variables managed via `flutter_dotenv` for configuration
+- Firebase credentials should be stored in `.env` file (not committed to repository)
 
 ### Platform-Specific
 - **Android**: Kotlin-based, uses Gradle KTS for build configuration
@@ -139,6 +149,9 @@ Current dependencies (from pubspec.yaml):
 - `flutter` (SDK)
 - `cupertino_icons: ^1.0.8`
 - `go_router: ^17.0.0`
+- `firebase_core: ^4.2.1`
+- `cloud_firestore: ^6.1.0`
+- `flutter_dotenv: ^6.0.0`
 
 Dev dependencies:
 - `flutter_test` (SDK)

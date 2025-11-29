@@ -147,40 +147,6 @@ class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  Text(
-                    'RAPORT DNIA:',
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  StatementFrame(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Text(
-                          'Dzisiejszy ranking incydentów wskazuje na znaczny wzrost zgłoszeń dotyczących stanu taboru, zwłaszcza w kwestii ogrzewania i klimatyzacji. Linia 7 utrzymuje niechlubne pierwsze miejsce z 18 zgłoszeniami, co stanowi alarmujący sygnał dla zarządcy transportu.',
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                              ),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'Pasażerowie zgłaszają również częste opóźnienia, co wpływa na ogólną satysfakcję z usług.',
-                          style: Theme.of(context).textTheme.bodyMedium
-                              ?.copyWith(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurfaceVariant,
-                              ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
                 ],
               ),
             ),
@@ -201,7 +167,7 @@ class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
               child: StampedButton(
                 onPressed: _navigateToAddIncident,
                 icon: Icons.add_alert,
-                label: 'ZGŁOŚ NOWY INCYDENT',
+                label: 'ZGŁOŚ NOWE ŻALE',
               ),
             ),
           ),

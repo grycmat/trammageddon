@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trammageddon/layout/scaffold_with_nav.dart';
 import 'package:trammageddon/routing/guards/auth_guard.dart';
 import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/screens/add_incident/add_incident.screen.dart';
 import 'package:trammageddon/screens/dashboard/dashboard_screen.dart';
-import 'package:trammageddon/screens/hall_of_defame/hall_of_shame_screen.dart';
+import 'package:trammageddon/screens/hall_of_defame/hall_of_defame_screen.dart';
 import 'package:trammageddon/screens/login/login.screen.dart';
 
 class AppRouter {
@@ -37,45 +38,89 @@ class AppRouter {
     },
 
     routes: [
-      GoRoute(
-        path: RouteNames.login,
-        name: 'login',
-        pageBuilder: (context, state) => _buildBrutalistPageTransition(
-          context: context,
-          state: state,
-          child: const LoginScreen(),
-        ),
-      ),
+      ShellRoute(
+        builder: (context, state, child) => ScaffoldWithNav(child: child),
+        routes: [
+          GoRoute(
+            path: RouteNames.login,
+            name: 'login',
+            pageBuilder: (context, state) => _buildBrutalistPageTransition(
+              context: context,
+              state: state,
+              child: const LoginScreen(),
+            ),
+          ),
 
-      GoRoute(
-        path: RouteNames.addIncident,
-        name: 'addIncident',
-        pageBuilder: (context, state) => _buildBrutalistPageTransition(
-          context: context,
-          state: state,
-          child: const AddIncidentScreen(),
-        ),
-      ),
+          GoRoute(
+            path: RouteNames.addIncident,
+            name: 'addIncident',
+            pageBuilder: (context, state) => _buildBrutalistPageTransition(
+              context: context,
+              state: state,
+              child: const AddIncidentScreen(),
+            ),
+          ),
 
-      GoRoute(
-        path: RouteNames.home,
-        name: 'home',
-        pageBuilder: (context, state) => _buildBrutalistPageTransition(
-          context: context,
-          state: state,
-          child: DashboardScreen(),
-        ),
-      ),
+          GoRoute(
+            path: RouteNames.home,
+            name: 'home',
+            pageBuilder: (context, state) => _buildBrutalistPageTransition(
+              context: context,
+              state: state,
+              child: DashboardScreen(),
+            ),
+          ),
 
-      GoRoute(
-        path: RouteNames.hallOfDefame,
-        name: 'hall-of-defame',
-        pageBuilder: (context, state) => _buildBrutalistPageTransition(
-          context: context,
-          state: state,
-          child: HallOfDefameScreen(),
-        ),
+          GoRoute(
+            path: RouteNames.hallOfDefame,
+            name: 'hall-of-defame',
+            pageBuilder: (context, state) => _buildBrutalistPageTransition(
+              context: context,
+              state: state,
+              child: HallOfDefameScreen(),
+            ),
+          ),
+        ],
       ),
+      // GoRoute(
+      //   path: RouteNames.login,
+      //   name: 'login',
+      //   pageBuilder: (context, state) => _buildBrutalistPageTransition(
+      //     context: context,
+      //     state: state,
+      //     child: const LoginScreen(),
+      //   ),
+      // ),
+      //
+      // GoRoute(
+      //   path: RouteNames.addIncident,
+      //   name: 'addIncident',
+      //   pageBuilder: (context, state) => _buildBrutalistPageTransition(
+      //     context: context,
+      //     state: state,
+      //     child: const AddIncidentScreen(),
+      //   ),
+      // ),
+      //
+      // GoRoute(
+      //   path: RouteNames.home,
+      //   name: 'home',
+      //   pageBuilder: (context, state) => _buildBrutalistPageTransition(
+      //     context: context,
+      //     state: state,
+      //     child: DashboardScreen(),
+      //   ),
+      // ),
+      //
+      // GoRoute(
+      //   path: RouteNames.hallOfDefame,
+      //   name: 'hall-of-defame',
+      //   pageBuilder: (context, state) => _buildBrutalistPageTransition(
+      //     context: context,
+      //     state: state,
+      //     child: HallOfDefameScreen(),
+      //   ),
+      // ),
 
       // TODO: Add error route when error screen is created
       // GoRoute(

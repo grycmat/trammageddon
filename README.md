@@ -86,10 +86,12 @@ The app features a distinctive brutalist/distress design inspired by warning pos
 ```
 lib/
 ├── main.dart                    # App entry point with router setup
+├── layout/
+│   └── scaffold_with_nav.dart   # Persistent navigation wrapper
 ├── model/
 │   └── ranking.model.dart       # Data models
 ├── routing/
-│   ├── app_router.dart          # GoRouter configuration
+│   ├── app_router.dart          # GoRouter with ShellRoute configuration
 │   ├── route_names.dart         # Route path constants
 │   └── guards/
 │       └── auth_guard.dart      # Authentication guard
@@ -108,7 +110,7 @@ lib/
 │   │   ├── app_dropdown.dart
 │   │   └── app_text_area.dart
 │   └── hall_of_defame/
-│       ├── hall_of_shame_screen.dart
+│       ├── hall_of_defame_screen.dart
 │       └── detailed_ranking_entry.dart
 ├── widgets/
 │   ├── verification_frame.dart  # Reusable components
@@ -128,8 +130,9 @@ lib/
 The app uses **GoRouter** for declarative routing with authentication guards:
 
 - Initial route: `/` (Dashboard)
+- Uses `ShellRoute` pattern with `ScaffoldWithNav` for persistent bottom navigation
 - Authentication guards ready (currently commented out during development)
-- Custom brutalist page transitions (sharp cut at 50% animation - no fade, instant switch)
+- Custom brutalist page transitions via `CustomTransitionPage` (sharp cut at 50% animation - no fade, instant switch)
 
 **Available Routes:**
 - `/` - Dashboard (home)
@@ -170,6 +173,18 @@ Currently using StatefulWidget for local state:
 
 No global state management library is integrated.
 
+### Backend Integration
+
+The app uses **Firebase** for backend services:
+- **Firebase Core** for initialization
+- **Cloud Firestore** for data persistence and real-time updates
+- **flutter_dotenv** for environment variable management
+
+**Setup:**
+1. Create a `.env` file in the project root (not committed to git)
+2. Add Firebase configuration credentials
+3. Run `flutter pub get` to install dependencies
+
 ## Key Screens
 
 ### DashboardScreen
@@ -180,7 +195,7 @@ No global state management library is integrated.
 ### HallOfDefameScreen
 - **Route**: `/hall-of-defame`
 - Displays rankings of most problematic tram lines
-- Uses DetailedRankingEntry widgets
+- Uses DetailedRankingEntry widgets for detailed entries
 
 ### AddIncidentScreen
 - **Route**: `/add-incident`
@@ -257,6 +272,9 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.8
   go_router: ^17.0.0
+  firebase_core: ^4.2.1
+  cloud_firestore: ^6.1.0
+  flutter_dotenv: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -375,16 +393,16 @@ flutter run
 ## Future Enhancements
 
 Potential features for development:
-1. Backend API integration
-2. Full authentication system
-3. Push notifications
-4. Geolocation integration
-5. Photo uploads
-6. User comments and discussions
-7. Detailed analytics and graphs
-8. Advanced filtering
-9. User profiles
-10. Multi-language support
+1. Full authentication system with Firebase Auth
+2. Push notifications via Firebase Cloud Messaging
+3. Geolocation integration for automatic tram line detection
+4. Photo uploads with Firebase Storage
+5. User comments and discussions
+6. Detailed analytics and graphs
+7. Advanced filtering and search
+8. User profiles and preferences
+9. Multi-language support (currently Polish)
+10. Offline mode with local caching
 
 ## Contributing
 
