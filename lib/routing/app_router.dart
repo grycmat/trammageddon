@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:trammageddon/routing/guards/auth_guard.dart';
 import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/screens/add_incident/add_incident.screen.dart';
+import 'package:trammageddon/screens/dashboard/dashboard_screen.dart';
+import 'package:trammageddon/screens/hall_of_defame/hall_of_shame_screen.dart';
 import 'package:trammageddon/screens/login/login.screen.dart';
 
 class AppRouter {
@@ -13,16 +15,16 @@ class AppRouter {
   late final GoRouter router = GoRouter(
     debugLogDiagnostics: true,
     refreshListenable: authGuard,
-    initialLocation: RouteNames.login,
+    initialLocation: RouteNames.home,
 
     redirect: (BuildContext context, GoRouterState state) async {
       final isAuthenticated = authGuard.isAuthenticated;
       final isLoginRoute = state.matchedLocation == RouteNames.login;
 
       // If not authenticated and trying to access protected route
-      if (!isAuthenticated && !isLoginRoute) {
-        return RouteNames.login;
-      }
+      // if (!isAuthenticated && !isLoginRoute) {
+      //   return RouteNames.login;
+      // }
 
       // If authenticated and on login screen, redirect to home
       // TODO: Uncomment when home screen is created
@@ -55,16 +57,25 @@ class AppRouter {
         ),
       ),
 
-      // TODO: Add home route when home screen is created
-      // GoRoute(
-      //   path: RouteNames.home,
-      //   name: 'home',
-      //   pageBuilder: (context, state) => _buildBrutalistPageTransition(
-      //     context: context,
-      //     state: state,
-      //     child: HomeScreen(authGuard: authGuard),
-      //   ),
-      // ),
+      GoRoute(
+        path: RouteNames.home,
+        name: 'home',
+        pageBuilder: (context, state) => _buildBrutalistPageTransition(
+          context: context,
+          state: state,
+          child: DashboardScreen(),
+        ),
+      ),
+
+      GoRoute(
+        path: RouteNames.hallOfDefame,
+        name: 'hall-of-defame',
+        pageBuilder: (context, state) => _buildBrutalistPageTransition(
+          context: context,
+          state: state,
+          child: HallOfDefameScreen(),
+        ),
+      ),
 
       // TODO: Add error route when error screen is created
       // GoRoute(

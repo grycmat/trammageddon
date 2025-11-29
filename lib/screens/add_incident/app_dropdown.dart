@@ -36,18 +36,17 @@ class AppDropdown extends StatelessWidget {
                 child: Text(
                   hint,
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context)
-                            .colorScheme
-                            .onSurfaceVariant
-                            .withOpacity(0.5),
-                      ),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.onSurfaceVariant.withOpacity(0.5),
+                  ),
                 ),
               ),
               icon: const SizedBox.shrink(),
               dropdownColor: Theme.of(context).scaffoldBackgroundColor,
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
               items: items.map((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
@@ -67,8 +66,8 @@ class AppDropdown extends StatelessWidget {
                       child: Text(
                         item,
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
                       ),
                     ),
                   );

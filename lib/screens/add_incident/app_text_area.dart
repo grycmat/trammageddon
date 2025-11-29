@@ -34,13 +34,15 @@ class _AppTextAreaState extends State<AppTextArea> {
         keyboardType: TextInputType.multiline,
         textInputAction: TextInputAction.newline,
         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
-              ),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurfaceVariant.withOpacity(0.5),
+          ),
           filled: true,
           fillColor: Theme.of(context).scaffoldBackgroundColor,
           contentPadding: const EdgeInsets.all(15),

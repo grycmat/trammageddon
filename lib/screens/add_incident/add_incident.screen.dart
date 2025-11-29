@@ -174,7 +174,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                         const SizedBox(height: 8),
                         AppTextField(
                           controller: _vehicleNumberController,
-                          hintText: 'NP. 1234 - ZWIĘKSZA SZANSE',
+                          hintText: 'NP. 1234 - WIĘKSZY WSTYD',
                           keyboardType: TextInputType.number,
                         ),
                       ],
@@ -186,7 +186,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Text(
-                          'OŚWIADCZENIE ŚWIADKA:',
+                          'WYLEJ SWE ŻALE:',
                           style: Theme.of(context).textTheme.headlineSmall
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.onSurface,
@@ -196,7 +196,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                         AppTextArea(
                           controller: _descriptionController,
                           hintText:
-                              'OPISZ PROBLEM WŁASNYMI SŁOWAMI. KAŻDY SZCZEGÓŁ MA ZNACZENIE. BĄDŹ PRECYZYJNY.',
+                              'WRESZCIE MOŻESZ SIĘ WYŻALIĆ. NIKT Z TYM NIE ZROBI, GWARANTUJĘ',
                         ),
                       ],
                     ),
@@ -241,7 +241,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
               child: StampedButton(
                 onPressed: _isFormValid ? _handleSubmit : null,
                 icon: Icons.gavel,
-                label: 'ZŁÓŻ OFICJALNE ZAWIADOMIENIE',
+                label: 'WYŚLIJ ME ŻALE',
               ),
             ),
           ),

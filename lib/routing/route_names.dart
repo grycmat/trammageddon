@@ -5,6 +5,7 @@ class RouteNames {
   static const String home = '/';
   static const String error = '/error';
   static const String addIncident = '/add-incident';
+  static const String hallOfDefame = '/hall-of-defame';
 
   // Future routes (examples)
   static const String profile = '/profile';

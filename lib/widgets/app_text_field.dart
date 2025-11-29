@@ -34,13 +34,15 @@ class _AppTextFieldState extends State<AppTextField> {
         obscureText: widget.obscureText,
         keyboardType: widget.keyboardType,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+          color: Theme.of(context).colorScheme.onSurface,
+        ),
         decoration: InputDecoration(
           hintText: widget.hintText,
           hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.5),
-              ),
+            color: Theme.of(
+              context,
+            ).colorScheme.onSurfaceVariant.withOpacity(0.5),
+          ),
           filled: true,
           fillColor: Theme.of(context).scaffoldBackgroundColor,
           contentPadding: const EdgeInsets.symmetric(

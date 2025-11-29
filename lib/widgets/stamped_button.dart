@@ -32,9 +32,7 @@ class _StampedButtonState extends State<StampedButton>
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         transform: Matrix4.identity()
-          ..rotateZ(
-            _isPressed ? -0.017 : -0.052,
-          )
+          ..rotateZ(_isPressed ? -0.017 : -0.052)
           ..scale(_isPressed ? 0.98 : 1.0),
         transformAlignment: Alignment.center,
         child: Container(
@@ -42,7 +40,9 @@ class _StampedButtonState extends State<StampedButton>
           decoration: BoxDecoration(
             color: isEnabled
                 ? Theme.of(context).colorScheme.primaryContainer
-                : Theme.of(context).colorScheme.onSurfaceVariant.withOpacity(0.3),
+                : Theme.of(
+                    context,
+                  ).colorScheme.onSurfaceVariant.withOpacity(0.3),
             border: Border.all(
               color: isEnabled
                   ? Theme.of(context).scaffoldBackgroundColor
@@ -52,12 +52,16 @@ class _StampedButtonState extends State<StampedButton>
             boxShadow: isEnabled
                 ? [
                     BoxShadow(
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.5),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.5),
                       blurRadius: _isPressed ? 2 : 15,
                       spreadRadius: 0,
                     ),
                     BoxShadow(
-                      color: Theme.of(context).colorScheme.onSurface.withOpacity(0.4),
+                      color: Theme.of(
+                        context,
+                      ).colorScheme.onSurface.withOpacity(0.4),
                       blurRadius: _isPressed ? 2 : 5,
                       spreadRadius: 0,
                     ),
@@ -78,11 +82,11 @@ class _StampedButtonState extends State<StampedButton>
               Text(
                 widget.label,
                 style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: isEnabled
-                          ? Theme.of(context).colorScheme.onPrimaryContainer
-                          : Theme.of(context).colorScheme.onSurfaceVariant,
-                      letterSpacing: 2,
-                    ),
+                  color: isEnabled
+                      ? Theme.of(context).colorScheme.onPrimaryContainer
+                      : Theme.of(context).colorScheme.onSurfaceVariant,
+                  letterSpacing: 2,
+                ),
               ),
             ],
           ),
