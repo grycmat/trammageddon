@@ -43,3 +43,17 @@ flutter:
           weight: 600
         - asset: lib/assets/font/Oswald-Bold.ttf
           weight: 700
+    - family: ChivoMono
+      fonts:
+        - asset: lib/assets/font/ChivoMono-ExtraLight.ttf
+          weight: 200
+        - asset: lib/assets/font/ChivoMono-Light.ttf
+          weight: 300
+        - asset: lib/assets/font/ChivoMono-Regular.ttf
+          weight: 400
+        - asset: lib/assets/font/ChivoMono-Medium.ttf
+          weight: 500
+        - asset: lib/assets/font/ChivoMono-SemiBold.ttf
+          weight: 600
+        - asset: lib/assets/font/ChivoMono-Bold.ttf
+          weight: 700
