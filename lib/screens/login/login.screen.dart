@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
+import 'package:trammageddon/routing/guards/auth_guard.dart';
+import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/widgets/app_text_field.dart';
 import 'package:trammageddon/widgets/stamped_button.dart';
 import 'package:trammageddon/widgets/verification_frame.dart';
@@ -12,47 +16,76 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
   bool _isButtonEnabled = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     _usernameController.addListener(_checkFields);
-    _passwordController.addListener(_checkFields);
+    _loadSavedUsername();
+  }
+
+  Future<void> _loadSavedUsername() async {
+    final authGuard = context.read<AuthGuard>();
+    final savedUsername = authGuard.username;
+    if (savedUsername != null && savedUsername.isNotEmpty) {
+      _usernameController.text = savedUsername;
+    }
   }
 
   void _checkFields() {
     setState(() {
-      _isButtonEnabled =
-          _usernameController.text.isNotEmpty &&
-          _passwordController.text.isNotEmpty;
+      _isButtonEnabled = _usernameController.text.isNotEmpty;
     });
   }
 
   @override
   void dispose() {
     _usernameController.dispose();
-    _passwordController.dispose();
     super.dispose();
   }
 
-  void _handleLogin() {
-    if (_isButtonEnabled) {}
+  Future<void> _handleLogin() async {
+    if (!_isButtonEnabled || _isLoading) return;
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      final authGuard = context.read<AuthGuard>();
+      await authGuard.login(_usernameController.text);
+
+      // Navigation is handled by AppRouter redirect
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'BŁĄD LOGOWANIA: ${e.toString()}',
+              style: const TextStyle(
+                fontFamily: 'ChivoMono',
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Icon(
-            Icons.lock,
-            size: 28,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
         title: Text(
           'BEZPIECZNY DOSTĘP',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
@@ -78,7 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'DATA WERYFIKACYJNA',
+                        'DANE WERYFIKACYJNE',
                         style: Theme.of(context).textTheme.headlineSmall
                             ?.copyWith(
                               color: Theme.of(context).colorScheme.onSurface,
@@ -87,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 24),
                       Text(
-                        'NAZWA UŻYTKOWNIKA / EMAIL',
+                        'NAZWA UŻYTKOWNIKA',
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),
@@ -95,22 +128,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       const SizedBox(height: 8),
                       AppTextField(
                         controller: _usernameController,
-                        hintText: 'WPROWADŹ DANE',
+                        hintText: 'TAK PODPISZESZ SWOJE ŻALE',
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 24),
-                      Text(
-                        'HASŁO',
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurface,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      AppTextField(
-                        controller: _passwordController,
-                        hintText: 'WPROWADŹ HASŁO',
-                        obscureText: true,
-                      ),
                     ],
                   ),
                 ),
@@ -130,11 +151,17 @@ class _LoginScreenState extends State<LoginScreen> {
             padding: const EdgeInsets.all(16),
             child: SafeArea(
               top: false,
-              child: StampedButton(
-                onPressed: _isButtonEnabled ? _handleLogin : null,
-                icon: Icons.login,
-                label: 'ZALOGUJ SIĘ',
-              ),
+              child: _isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    )
+                  : StampedButton(
+                      onPressed: _isButtonEnabled ? _handleLogin : null,
+                      icon: Icons.login,
+                      label: 'ZALOGUJ SIĘ',
+                    ),
             ),
           ),
         ],

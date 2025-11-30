@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trammageddon/screens/add_incident/app_dropdown.dart';
 import 'package:trammageddon/screens/add_incident/app_text_area.dart';
 import 'package:trammageddon/screens/add_incident/category_tag.dart';
@@ -105,14 +106,17 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
       appBar: AppBar(
         leading: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Icon(
-            Icons.report_problem,
-            size: 28,
-            color: Theme.of(context).colorScheme.primary,
+          child: InkWell(
+            onTap: () => context.pop(),
+            child: Icon(
+              Icons.arrow_back,
+              size: 28,
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
         ),
         title: Text(
-          'PILNE ZAWIADOMIENIE',
+          'UWAGA UWAGA UWAGA',
           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
             color: Theme.of(context).colorScheme.primary,
           ),

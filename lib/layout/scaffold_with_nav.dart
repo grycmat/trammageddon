@@ -2,12 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:trammageddon/widgets/nav_bar.dart';
 
 class ScaffoldWithNav extends StatelessWidget {
-  const ScaffoldWithNav({super.key, required this.child});
+  const ScaffoldWithNav({super.key, required this.child, appBar});
 
   final Widget child;
+  final AppBar? appBar = null;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(body: child, bottomNavigationBar: const NavBar());
+    return Scaffold(
+      appBar: appBar,
+      body: Padding(padding: const EdgeInsets.only(top: 32), child: child),
+      bottomNavigationBar: const NavBar(),
+    );
   }
 }

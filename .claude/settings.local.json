@@ -4,7 +4,10 @@
       "Bash(flutter --version:*)",
       "Bash(flutter analyze:*)",
       "Bash(flutter pub get:*)",
-      "Bash(dir:*)"
+      "Bash(dir:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__get-library-docs",
+      "Bash(flutter build:*)"
     ],
     "deny": [],
     "ask": []

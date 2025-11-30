@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:trammageddon/model/ranking.model.dart';
-import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/screens/add_incident/statement_frame.dart';
 import 'package:trammageddon/screens/dashboard/data_box.dart';
 import 'package:trammageddon/screens/dashboard/top_ranking_item.dart';
-import 'package:trammageddon/widgets/stamped_button.dart';
+import 'package:trammageddon/widgets/new_incident_button.dart';
 
 class DashboardScreen extends StatelessWidget {
   DashboardScreen({super.key});
@@ -44,7 +42,7 @@ class DashboardScreen extends StatelessWidget {
           ),
           const SizedBox(height: 32),
           Text(
-            'GORZKIE ŻALE',
+            'ME ŻALE',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               color: Theme.of(context).colorScheme.onSurface,
             ),
@@ -104,11 +102,7 @@ class DashboardScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          StampedButton(
-            onPressed: () => context.push(RouteNames.addIncident),
-            icon: Icons.add_alert,
-            label: 'ZGŁOŚ NOWE ŻALE',
-          ),
+          const NewIncidentButton(),
           const SizedBox(height: 16),
         ],
       ),

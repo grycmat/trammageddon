@@ -84,17 +84,17 @@ class _NavBarState extends State<NavBar> {
                   context.push(RouteNames.hallOfDefame);
                 },
               ),
-              _buildNavItem(
-                context: context,
-                icon: Icons.history,
-                label: 'HISTORIA',
-                index: 2,
-                onTap: () {
-                  setState(() {
-                    selectedIndex = 2;
-                  });
-                },
-              ),
+              // _buildNavItem(
+              //   context: context,
+              //   icon: Icons.history,
+              //   label: 'HISTORIA',
+              //   index: 2,
+              //   onTap: () {
+              //     setState(() {
+              //       selectedIndex = 2;
+              //     });
+              //   },
+              // ),
               _buildNavItem(
                 context: context,
                 icon: Icons.settings,
@@ -104,6 +104,7 @@ class _NavBarState extends State<NavBar> {
                   setState(() {
                     selectedIndex = 3;
                   });
+                  context.push(RouteNames.settings);
                 },
               ),
             ],
