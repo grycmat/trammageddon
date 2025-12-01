@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:provider/provider.dart';
 import 'package:trammageddon/routing/app_router.dart';
 import 'package:trammageddon/routing/guards/auth_guard.dart';
 import 'package:trammageddon/services/preferences_service.dart';
 import 'package:trammageddon/theme/theme.dart';
 
+final getIt = GetIt.instance;
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final preferencesService = await PreferencesService.getInstance();
-  runApp(Trammageddon(preferencesService: preferencesService));
+  getIt.registerSingletonAsync<PreferencesService>(
+    () => PreferencesService.init(),
+  );
+  runApp(Trammageddon());
 }
 
 class Trammageddon extends StatefulWidget {
-  final PreferencesService preferencesService;
-
-  const Trammageddon({super.key, required this.preferencesService});
+  const Trammageddon({super.key});
 
   @override
   State<Trammageddon> createState() => _TrammageddonState();
@@ -27,7 +30,7 @@ class _TrammageddonState extends State<Trammageddon> {
   @override
   void initState() {
     super.initState();
-    _authGuard = AuthGuard(widget.preferencesService);
+    _authGuard = AuthGuard(getIt.get<PreferencesService>());
     _appRouter = AppRouter(authGuard: _authGuard);
   }
 

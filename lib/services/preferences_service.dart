@@ -1,41 +1,39 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PreferencesService {
-  static PreferencesService? _instance;
-  static SharedPreferences? _preferences;
+  PreferencesService._(this._preferences);
 
-  static const String _keyUsername = 'username';
-  static const String _keyThemeMode = 'theme_mode';
+  final SharedPreferences _preferences;
 
-  PreferencesService._();
-
-  static Future<PreferencesService> getInstance() async {
-    _instance ??= PreferencesService._();
-    _preferences ??= await SharedPreferences.getInstance();
-    return _instance!;
+  static Future<PreferencesService> init() async {
+    final preferences = await SharedPreferences.getInstance();
+    return PreferencesService._(preferences);
   }
 
+  final String _keyUsername = 'username';
+  final String _keyThemeMode = 'theme_mode';
+
   Future<void> saveUsername(String username) async {
-    await _preferences?.setString(_keyUsername, username);
+    await _preferences.setString(_keyUsername, username);
   }
 
   String? getUsername() {
-    return _preferences?.getString(_keyUsername);
+    return _preferences.getString(_keyUsername);
   }
 
   Future<void> clearUsername() async {
-    await _preferences?.remove(_keyUsername);
+    await _preferences.remove(_keyUsername);
   }
 
   Future<void> saveThemeMode(String mode) async {
-    await _preferences?.setString(_keyThemeMode, mode);
+    await _preferences.setString(_keyThemeMode, mode);
   }
 
   String? getThemeMode() {
-    return _preferences?.getString(_keyThemeMode);
+    return _preferences.getString(_keyThemeMode);
   }
 
   Future<void> clearAll() async {
-    await _preferences?.clear();
+    await _preferences.clear();
   }
 }

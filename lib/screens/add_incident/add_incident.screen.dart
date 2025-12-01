@@ -207,7 +207,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                   ),
                   const SizedBox(height: 24),
                   Text(
-                    'CZY PASUJE DO KATEGORII?',
+                    'CO TO?',
                     style: Theme.of(context).textTheme.titleLarge?.copyWith(
                       color: Theme.of(context).colorScheme.onSurface,
                     ),
