@@ -13,6 +13,7 @@ void main() async {
   getIt.registerSingletonAsync<PreferencesService>(
     () => PreferencesService.init(),
   );
+  await getIt.allReady();
   runApp(Trammageddon());
 }
 

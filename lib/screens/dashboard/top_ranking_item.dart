@@ -19,10 +19,10 @@ class TopRankingItem extends StatelessWidget {
       children: [
         RichText(
           text: TextSpan(
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontFamily: 'ChivoMono',
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontFamily: 'ChivoMono',
+              color: Theme.of(context).colorScheme.primary,
+            ),
             children: [
               TextSpan(text: '$rank. '),
               const TextSpan(text: 'LINIA '),
@@ -32,10 +32,10 @@ class TopRankingItem extends StatelessWidget {
         ),
         RichText(
           text: TextSpan(
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontFamily: 'ChivoMono',
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+              fontFamily: 'ChivoMono',
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             children: [
               TextSpan(text: '$reports '),
               const TextSpan(text: 'ZGŁOSZEŃ'),
