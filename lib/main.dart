@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:provider/provider.dart';
 import 'package:trammageddon/routing/app_router.dart';
 import 'package:trammageddon/routing/guards/auth_guard.dart';
 import 'package:trammageddon/services/preferences_service.dart';
@@ -12,6 +11,10 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   getIt.registerSingletonAsync<PreferencesService>(
     () => PreferencesService.init(),
+  );
+  getIt.registerSingletonAsync<AuthGuard>(
+    () async => AuthGuard(getIt.get<PreferencesService>()),
+    dependsOn: [PreferencesService],
   );
   await getIt.allReady();
   runApp(Trammageddon());
@@ -25,34 +28,23 @@ class Trammageddon extends StatefulWidget {
 }
 
 class _TrammageddonState extends State<Trammageddon> {
-  late final AuthGuard _authGuard;
   late final AppRouter _appRouter;
 
   @override
   void initState() {
     super.initState();
-    _authGuard = AuthGuard(getIt.get<PreferencesService>());
-    _appRouter = AppRouter(authGuard: _authGuard);
-  }
-
-  @override
-  void dispose() {
-    _authGuard.dispose();
-    super.dispose();
+    _appRouter = AppRouter();
   }
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider.value(
-      value: _authGuard,
-      child: MaterialApp.router(
-        title: 'Trammageddon',
-        theme: AppTheme.lightTheme,
-        darkTheme: AppTheme.darkTheme,
-        themeMode: ThemeMode.dark,
-        routerConfig: _appRouter.router,
-        debugShowCheckedModeBanner: false,
-      ),
+    return MaterialApp.router(
+      title: 'Trammageddon',
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark,
+      routerConfig: _appRouter.router,
+      debugShowCheckedModeBanner: false,
     );
   }
 }

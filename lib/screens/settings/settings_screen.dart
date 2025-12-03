@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:trammageddon/routing/guards/auth_guard.dart';
+import 'package:get_it/get_it.dart';
 import 'package:trammageddon/screens/add_incident/app_dropdown.dart';
+import 'package:trammageddon/services/preferences_service.dart';
 import 'package:trammageddon/widgets/app_text_field.dart';
 import 'package:trammageddon/widgets/stamped_button.dart';
 
@@ -36,8 +36,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   Future<void> _loadUsername() async {
-    final authGuard = context.read<AuthGuard>();
-    final savedUsername = authGuard.username ?? '';
+    final preferenceService = GetIt.I.get<PreferencesService>();
+    final savedUsername = preferenceService.getUsername() ?? '';
     setState(() {
       _initialUsername = savedUsername;
       _usernameController.text = savedUsername;
@@ -77,8 +77,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
 
     try {
-      final authGuard = context.read<AuthGuard>();
-      await authGuard.updateUsername(newUsername);
+      final preferenceService = GetIt.I.get<PreferencesService>();
+      await preferenceService.saveUsername(newUsername);
 
       setState(() {
         _initialUsername = newUsername;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trammageddon/layout/scaffold_with_nav.dart';
 import 'package:trammageddon/routing/guards/auth_guard.dart';
@@ -10,10 +11,7 @@ import 'package:trammageddon/screens/login/login.screen.dart';
 import 'package:trammageddon/screens/settings/settings_screen.dart';
 
 class AppRouter {
-  final AuthGuard authGuard;
-
-  AppRouter({required this.authGuard});
-
+  late final authGuard = GetIt.I.get<AuthGuard>();
   late final GoRouter router = GoRouter(
     debugLogDiagnostics: true,
     refreshListenable: authGuard,
