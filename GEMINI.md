@@ -7,7 +7,7 @@ Trammageddon is a Flutter mobile application designed with a brutalist aesthetic
 - **Framework**: Flutter (Dart)
 - **Routing**: `go_router` with custom "brutalist" page transitions (instant cuts).
 - **Backend**: Firebase (Core, Firestore) via `flutter_dotenv` for configuration.
-- **State Management**: Local state (`setState`, `ChangeNotifier` for Auth).
+- **State Management**: Local state (`setState`), Provider (for Auth/Global state), GetIt (Service Locator for Preferences).
 - **Theming**: Custom `AppTheme` (Dark & Light) with Material 3 support.
 - **Fonts**: Oswald (Headlines), ChivoMono (Body).
 
@@ -18,13 +18,14 @@ Trammageddon is a Flutter mobile application designed with a brutalist aesthetic
 - **Style**: Strict adherence to brutalist design principles (0px border radius, thick borders, uppercase text).
 
 ## Key Directories & Files
-- `lib/main.dart`: App entry point, provider setup.
+- `lib/main.dart`: App entry point, Provider & GetIt setup.
 - `lib/routing/`: Routing configuration (`app_router.dart`, `route_names.dart`) and guards.
 - `lib/theme/`: Theme definitions (`theme.dart`) and color palette (`colors.dart`).
 - `lib/screens/`:
   - `dashboard/`: Home screen with stats.
   - `add_incident/`: Incident reporting form.
   - `hall_of_defame/`: Rankings list.
+  - `settings/`: User preferences (Username, Theme, City).
   - `login/`: Authentication screen (Username only, Auto-login support).
 - `lib/widgets/`: Shared components like `StampedButton`, `AppTextField`, `VerificationFrame`.
 
