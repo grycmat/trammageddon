@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:trammageddon/screens/add_incident/app_dropdown.dart';
-import 'package:trammageddon/services/preferences_service.dart';
+import 'package:trammageddon/services/preferences.service.dart';
 import 'package:trammageddon/widgets/app_text_field.dart';
 import 'package:trammageddon/widgets/stamped_button.dart';
 
@@ -157,10 +157,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                AppDropdown(
+                AppDropdown<String>(
                   value: _selectedTheme,
                   items: _themeOptions,
                   hint: 'WYBIERZ MOTYW...',
+                  itemLabelBuilder: (item) => item,
                   onChanged: (value) {
                     setState(() {
                       _selectedTheme = value;
@@ -229,10 +230,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                AppDropdown(
+                AppDropdown<String>(
                   value: _selectedCity,
                   items: _cityOptions,
                   hint: 'WYBIERZ MIASTO...',
+                  itemLabelBuilder: (item) => item,
                   onChanged: (value) {
                     setState(() {
                       _selectedCity = value;

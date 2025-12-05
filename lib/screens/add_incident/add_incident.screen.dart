@@ -1,12 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trammageddon/data/categories.dart';
+import 'package:trammageddon/data/tram_lines.dart';
+import 'package:trammageddon/model/category.model.dart';
+import 'package:trammageddon/model/incident.model.dart';
+import 'package:trammageddon/model/tram_line.model.dart';
+import 'package:trammageddon/routing/guards/auth_guard.dart';
 import 'package:trammageddon/screens/add_incident/app_dropdown.dart';
 import 'package:trammageddon/screens/add_incident/app_text_area.dart';
 import 'package:trammageddon/screens/add_incident/category_tag.dart';
 import 'package:trammageddon/screens/add_incident/statement_frame.dart';
 import 'package:trammageddon/screens/add_incident/wanted_border.dart';
+import 'package:trammageddon/services/incident.service.dart';
 import 'package:trammageddon/widgets/app_text_field.dart';
 import 'package:trammageddon/widgets/stamped_button.dart';
+
+final getIt = GetIt.I;
 
 class AddIncidentScreen extends StatefulWidget {
   const AddIncidentScreen({super.key});
@@ -18,54 +28,11 @@ class AddIncidentScreen extends StatefulWidget {
 class _AddIncidentScreenState extends State<AddIncidentScreen> {
   final _vehicleNumberController = TextEditingController();
   final _descriptionController = TextEditingController();
-  String? _selectedLine;
-  final Set<String> _selectedCategories = {'BRAK OGRZEWANIA/KLIMATYZACJI'};
-
-  final List<String> _tramLines = [
-    '1 - Cichy Kącik -> Elektromontaż',
-    '2 - Salwator -> Cmentarz Rakowicki',
-    '3 - Krowodrza Górka P+R -> Nowy Bieżanów P+R',
-    '4 - Bronowice Małe -> Zajezdnia Nowa Huta',
-    '5 - Krowodrza Górka P+R -> Elektromontaż',
-    '6 - Cichy Kącik -> Mały Płaszów P+R',
-    '8 - Bronowice Małe -> Borek Fałęcki',
-    '9 - Rondo Hipokratesa -> Nowy Bieżanów P+R',
-    '10 - Kurdwanów P+R -> Pleszów',
-    '11 - Mały Płaszów P+R -> Czerwone Maki P+R',
-    '13 - Bronowice -> Nowy Bieżanów P+R',
-    '14 - Bronowice -> Os. Piastów',
-    '16 - Mistrzejowice -> Bardosa',
-    '17 - Dworzec Towarowy -> Czerwone Maki P+R',
-    '18 - Górka Narodowa P+R -> Czerwone Maki P+R',
-    '19 - Dworzec Towarowy -> Borek Fałęcki',
-    '20 - Cichy Kącik -> Mały Płaszów P+R',
-    '21 - Os. Piastów -> Pleszów',
-    '22 - Borek Fałęcki -> Zajezdnia Nowa Huta',
-    '24 - Bronowice Małe -> Kurdwanów P+R',
-    '42 - Os. Piastów -> Kurdwanów P+R',
-    '44 - Kopiec Wandy -> Dworzec Towarowy',
-    '48 - Bronowice Małe -> Borek Fałęcki',
-    '49 - TAURON Arena Kraków Wieczysta -> Nowy Bieżanów P+R',
-    '50 - Górka Narodowa P+R -> Borek Fałęcki',
-    '52 - Czerwone Maki P+R -> Os. Piastów',
-    '62 - Plac Centralny im. R. Reagana -> Czerwone Maki P+R',
-    '64 - Os. Piastów -> Bronowice Małe',
-    '69 - Nowy Bieżanów P+R -> Górka Narodowa P+R',
-    '72 - Mały Płaszów P+R -> Cmentarz Rakowicki',
-    '75 - Górka Narodowa P+R -> Rondo Hipokratesa',
-  ];
-
-  final List<String> _categories = [
-    'BRUD I SMRÓD',
-    'UKROP',
-    'ZIMNICA',
-    'OCZYWIŚCIE SPÓŹNIENIE',
-    'TŁOK',
-    'AGRESYWNY PASAŻER',
-    'SZALONA JAZDA',
-    'WSZYSTKO NAJGORZEJ',
-    'NIE LUBIĘ GO PO PROSTU',
-  ];
+  TramLine? _selectedLine;
+  final Set<Category> _selectedCategories = {};
+  bool _isSubmitting = false;
+  final _authGuard = getIt.get<AuthGuard>();
+  final _incidentService = getIt.get<IncidentService>();
 
   bool get _isFormValid {
     return _selectedLine != null && _descriptionController.text.isNotEmpty;
@@ -74,19 +41,18 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
   @override
   void initState() {
     super.initState();
+    final defaultCategory = kCategories.firstWhere(
+      (c) => c.label == 'BRAK OGRZEWANIA/KLIMATYZACJI',
+      orElse: () => kCategories.first,
+    );
+    _selectedCategories.add(defaultCategory);
+
     _descriptionController.addListener(() {
       setState(() {});
     });
   }
 
-  @override
-  void dispose() {
-    _vehicleNumberController.dispose();
-    _descriptionController.dispose();
-    super.dispose();
-  }
-
-  void _toggleCategory(String category) {
+  void _toggleCategory(Category category) {
     setState(() {
       if (_selectedCategories.contains(category)) {
         _selectedCategories.remove(category);
@@ -96,8 +62,50 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
     });
   }
 
-  void _handleSubmit() {
-    if (_isFormValid) {}
+  Future<void> _handleSubmit() async {
+    if (!_isFormValid) return;
+    setState(() => _isSubmitting = true);
+
+    try {
+      final incident = Incident(
+        line: _selectedLine!.number,
+        vehicleNumber: _vehicleNumberController.text.isNotEmpty
+            ? _vehicleNumberController.text
+            : null,
+        description: _descriptionController.text,
+        categories: _selectedCategories
+            .map((c) => c.label)
+            .toList(), // Convert back to string list for now or update Incident model
+        timestamp: DateTime.now(),
+        username: _authGuard.username ?? 'Anonim',
+        city: 'KRAKÓW',
+      );
+
+      await _incidentService.addIncident(incident);
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('ŻALE WYLANE POMYŚLNIE!'),
+            backgroundColor: Theme.of(context).colorScheme.primary,
+          ),
+        );
+        context.pop(); // Go back to dashboard
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('BŁĄD: ${e.toString()}'),
+            backgroundColor: Theme.of(context).colorScheme.error,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
+    }
   }
 
   @override
@@ -157,10 +165,11 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                               ),
                         ),
                         const SizedBox(height: 8),
-                        AppDropdown(
+                        AppDropdown<TramLine>(
                           value: _selectedLine,
-                          items: _tramLines,
+                          items: kTramLines,
                           hint: 'WYBIERZ LINIĘ...',
+                          itemLabelBuilder: (item) => item.formatted,
                           onChanged: (value) {
                             setState(() {
                               _selectedLine = value;
@@ -200,7 +209,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                         AppTextArea(
                           controller: _descriptionController,
                           hintText:
-                              'WRESZCIE MOŻESZ SIĘ WYŻALIĆ. NIKT Z TYM NIE ZROBI, GWARANTUJĘ',
+                              'WRESZCIE MOŻESZ SIĘ WYŻALIĆ. NIKT Z TYM NIC NIE ZROBI, GWARANTUJĘ',
                         ),
                       ],
                     ),
@@ -216,9 +225,9 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                   Wrap(
                     spacing: 12,
                     runSpacing: 12,
-                    children: _categories.map((category) {
+                    children: kCategories.map((category) {
                       return CategoryTag(
-                        label: category,
+                        label: category.label,
                         isSelected: _selectedCategories.contains(category),
                         onTap: () => _toggleCategory(category),
                       );
@@ -242,11 +251,13 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
             padding: const EdgeInsets.all(16),
             child: SafeArea(
               top: false,
-              child: StampedButton(
-                onPressed: _isFormValid ? _handleSubmit : null,
-                icon: Icons.gavel,
-                label: 'WYŚLIJ ME ŻALE',
-              ),
+              child: _isSubmitting
+                  ? CircularProgressIndicator()
+                  : StampedButton(
+                      onPressed: _isFormValid ? _handleSubmit : null,
+                      icon: Icons.gavel,
+                      label: 'WYŚLIJ ME ŻALE',
+                    ),
             ),
           ),
         ],

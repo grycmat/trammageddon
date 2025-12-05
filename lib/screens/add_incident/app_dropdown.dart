@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-class AppDropdown extends StatelessWidget {
-  final String? value;
-  final List<String> items;
+class AppDropdown<T> extends StatelessWidget {
+  final T? value;
+  final List<T> items;
   final String hint;
-  final ValueChanged<String?> onChanged;
+  final ValueChanged<T?> onChanged;
+  final String Function(T) itemLabelBuilder;
 
   const AppDropdown({
     super.key,
@@ -12,6 +13,7 @@ class AppDropdown extends StatelessWidget {
     required this.items,
     required this.hint,
     required this.onChanged,
+    required this.itemLabelBuilder,
   });
 
   @override
@@ -28,7 +30,7 @@ class AppDropdown extends StatelessWidget {
       child: Stack(
         children: [
           DropdownButtonHideUnderline(
-            child: DropdownButton<String>(
+            child: DropdownButton<T>(
               value: value,
               isExpanded: true,
               hint: Padding(
@@ -47,24 +49,24 @@ class AppDropdown extends StatelessWidget {
               style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                 color: Theme.of(context).colorScheme.onSurface,
               ),
-              items: items.map((String item) {
-                return DropdownMenuItem<String>(
+              items: items.map((T item) {
+                return DropdownMenuItem<T>(
                   value: item,
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: Text(item),
+                    child: Text(itemLabelBuilder(item)),
                   ),
                 );
               }).toList(),
               onChanged: onChanged,
               selectedItemBuilder: (BuildContext context) {
-                return items.map((String item) {
+                return items.map((T item) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        item,
+                        itemLabelBuilder(item),
                         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: Theme.of(context).colorScheme.onSurface,
                         ),

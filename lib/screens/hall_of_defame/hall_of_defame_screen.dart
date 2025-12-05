@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:trammageddon/data/categories.dart';
+import 'package:trammageddon/model/category.model.dart';
 import 'package:trammageddon/screens/add_incident/category_tag.dart';
 import 'package:trammageddon/screens/add_incident/statement_frame.dart';
 import 'package:trammageddon/screens/hall_of_defame/detailed_ranking_entry.dart';
@@ -12,7 +14,7 @@ class HallOfDefameScreen extends StatefulWidget {
 }
 
 class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
-  final Set<String> _selectedCategories = {'BRAK OGRZEWANIA/KLIMATYZACJI'};
+  final Set<Category> _selectedCategories = {};
 
   final List<RankingData> _rankings = [
     RankingData(rank: 1, line: '7', incidents: 18),
@@ -22,16 +24,17 @@ class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
     RankingData(rank: 5, line: '3', incidents: 8),
   ];
 
-  final List<String> _categories = [
-    'BRAK OGRZEWANIA/KLIMATYZACJI',
-    'BRUD I SMRÓD',
-    'SPÓŹNIENIE',
-    'TŁOK',
-    'AGRESYWNY PASAŻER',
-    'NIEBEZPIECZNA JAZDA',
-  ];
+  @override
+  void initState() {
+    super.initState();
+    final defaultCategory = kCategories.firstWhere(
+      (c) => c.label == 'BRAK OGRZEWANIA/KLIMATYZACJI',
+      orElse: () => kCategories.first,
+    );
+    _selectedCategories.add(defaultCategory);
+  }
 
-  void _toggleCategory(String category) {
+  void _toggleCategory(Category category) {
     setState(() {
       if (_selectedCategories.contains(category)) {
         _selectedCategories.remove(category);
@@ -103,9 +106,9 @@ class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
                       Wrap(
                         spacing: 12,
                         runSpacing: 12,
-                        children: _categories.map((category) {
+                        children: kCategories.map((category) {
                           return CategoryTag(
-                            label: category,
+                            label: category.label,
                             isSelected: _selectedCategories.contains(category),
                             onTap: () => _toggleCategory(category),
                           );

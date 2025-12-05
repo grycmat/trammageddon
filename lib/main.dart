@@ -1,14 +1,19 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:trammageddon/firebase_options.dart';
 import 'package:trammageddon/routing/app_router.dart';
 import 'package:trammageddon/routing/guards/auth_guard.dart';
-import 'package:trammageddon/services/preferences_service.dart';
+import 'package:trammageddon/services/incident.service.dart';
+import 'package:trammageddon/services/preferences.service.dart';
 import 'package:trammageddon/theme/theme.dart';
 
 final getIt = GetIt.instance;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  getIt.registerSingleton<IncidentService>(IncidentService());
   getIt.registerSingletonAsync<PreferencesService>(
     () => PreferencesService.init(),
   );

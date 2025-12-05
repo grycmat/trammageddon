@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:trammageddon/services/preferences_service.dart';
+import 'package:trammageddon/services/preferences.service.dart';
 
 class AuthGuard extends ChangeNotifier {
   bool _isAuthenticated = false;
@@ -22,7 +22,9 @@ class AuthGuard extends ChangeNotifier {
   }
 
   Future<void> login(String username) async {
-    await Future.delayed(const Duration(milliseconds: 500)); // Small delay for UX
+    await Future.delayed(
+      const Duration(milliseconds: 500),
+    ); // Small delay for UX
 
     if (username.isNotEmpty) {
       _isAuthenticated = true;

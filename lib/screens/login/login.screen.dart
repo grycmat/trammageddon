@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
+import 'package:trammageddon/main.dart';
 import 'package:trammageddon/routing/guards/auth_guard.dart';
-import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/widgets/app_text_field.dart';
 import 'package:trammageddon/widgets/stamped_button.dart';
 import 'package:trammageddon/widgets/verification_frame.dart';
@@ -27,7 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _loadSavedUsername() async {
-    final authGuard = context.read<AuthGuard>();
+    final authGuard = getIt.get<AuthGuard>();
     final savedUsername = authGuard.username;
     if (savedUsername != null && savedUsername.isNotEmpty) {
       _usernameController.text = savedUsername;
@@ -54,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final authGuard = context.read<AuthGuard>();
+      final authGuard = getIt.get<AuthGuard>();
       await authGuard.login(_usernameController.text);
 
       // Navigation is handled by AppRouter redirect
