@@ -16,6 +16,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
   bool _isButtonEnabled = false;
   bool _isLoading = false;
+  bool isRegisterMode = false;
 
   @override
   void initState() {
@@ -54,8 +55,6 @@ class _LoginScreenState extends State<LoginScreen> {
     try {
       final authGuard = getIt.get<AuthGuard>();
       await authGuard.login(_usernameController.text);
-
-      // Navigation is handled by AppRouter redirect
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -130,6 +129,11 @@ class _LoginScreenState extends State<LoginScreen> {
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 24),
+                      AppTextField(
+                        controller: _usernameController,
+                        hintText: 'HASŁO, ZERO BEZPIECZEŃSTWA',
+                        keyboardType: TextInputType.visiblePassword,
+                      ),
                     ],
                   ),
                 ),
@@ -158,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   : StampedButton(
                       onPressed: _isButtonEnabled ? _handleLogin : null,
                       icon: Icons.login,
-                      label: 'ZALOGUJ SIĘ',
+                      label: isRegisterMode ? 'REJESTRACJA' : 'ZALOGUJ SIĘ',
                     ),
             ),
           ),

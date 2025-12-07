@@ -12,13 +12,19 @@ class PreferencesService {
 
   final String _keyUsername = 'username';
   final String _keyThemeMode = 'theme_mode';
+  final String _keyUserId = 'user_id';
 
-  Future<void> saveUsername(String username) async {
+  Future<void> saveUsername(String username, String password) async {
     await _preferences.setString(_keyUsername, username);
+    await _preferences.setString(_keyUserId, userId);
   }
 
   String? getUsername() {
     return _preferences.getString(_keyUsername);
+  }
+
+  String? getUserId() {
+    return _preferences.getString(_keyUserId);
   }
 
   Future<void> clearUsername() async {

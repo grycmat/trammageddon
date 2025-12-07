@@ -22,9 +22,7 @@ class AuthGuard extends ChangeNotifier {
   }
 
   Future<void> login(String username) async {
-    await Future.delayed(
-      const Duration(milliseconds: 500),
-    ); // Small delay for UX
+    await Future.delayed(const Duration(milliseconds: 500));
 
     if (username.isNotEmpty) {
       _isAuthenticated = true;

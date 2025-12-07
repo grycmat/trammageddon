@@ -90,7 +90,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
             backgroundColor: Theme.of(context).colorScheme.primary,
           ),
         );
-        context.pop(); // Go back to dashboard
+        context.pop();
       }
     } catch (e) {
       if (mounted) {

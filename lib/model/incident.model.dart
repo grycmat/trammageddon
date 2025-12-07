@@ -8,6 +8,7 @@ class Incident {
   final List<String> categories;
   final DateTime timestamp;
   final String username;
+  final String userId;
   final String city;
 
   Incident({
@@ -18,6 +19,7 @@ class Incident {
     required this.categories,
     required this.timestamp,
     required this.username,
+    required this.userId,
     required this.city,
   });
 
@@ -29,6 +31,7 @@ class Incident {
       'categories': categories,
       'timestamp': Timestamp.fromDate(timestamp),
       'username': username,
+      'userId': userId,
       'city': city,
     };
   }
@@ -38,12 +41,13 @@ class Incident {
     return Incident(
       id: doc.id,
       line: data['line'] ?? '',
-      vehicleNumber: data['vehicleNumber'],
+      vehicleNumber: data['vehicleNumber'] ?? '',
       description: data['description'] ?? '',
       categories: List<String>.from(data['categories'] ?? []),
       timestamp: (data['timestamp'] as Timestamp).toDate(),
-      username: data['username'] ?? 'Anonim',
-      city: data['city'] ?? 'KRAKÓW',
+      username: data['username'],
+      userId: data['userId'],
+      city: data['city'],
     );
   }
 }
