@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:trammageddon/main.dart';
-import 'package:trammageddon/routing/guards/auth_guard.dart';
+import 'package:trammageddon/services/auth.service.dart';
 import 'package:trammageddon/widgets/app_text_field.dart';
 import 'package:trammageddon/widgets/stamped_button.dart';
 import 'package:trammageddon/widgets/verification_frame.dart';
@@ -14,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
   bool _isButtonEnabled = false;
   bool _isLoading = false;
   bool isRegisterMode = false;
@@ -22,12 +23,13 @@ class _LoginScreenState extends State<LoginScreen> {
   void initState() {
     super.initState();
     _usernameController.addListener(_checkFields);
+    _passwordController.addListener(_checkFields);
     _loadSavedUsername();
   }
 
   Future<void> _loadSavedUsername() async {
-    final authGuard = getIt.get<AuthGuard>();
-    final savedUsername = authGuard.username;
+    final authService = getIt.get<AuthService>();
+    final savedUsername = authService.username;
     if (savedUsername != null && savedUsername.isNotEmpty) {
       _usernameController.text = savedUsername;
     }
@@ -35,13 +37,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _checkFields() {
     setState(() {
-      _isButtonEnabled = _usernameController.text.isNotEmpty;
+      _isButtonEnabled =
+          _usernameController.text.isNotEmpty &&
+          _passwordController.text.isNotEmpty;
     });
   }
 
   @override
   void dispose() {
     _usernameController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -53,8 +58,18 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     try {
-      final authGuard = getIt.get<AuthGuard>();
-      await authGuard.login(_usernameController.text);
+      final authService = getIt.get<AuthService>();
+      if (isRegisterMode) {
+        await authService.register(
+          _usernameController.text,
+          _passwordController.text,
+        );
+      } else {
+        await authService.login(
+          _usernameController.text,
+          _passwordController.text,
+        );
+      }
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -107,13 +122,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      Text(
-                        'DANE WERYFIKACYJNE',
-                        style: Theme.of(context).textTheme.headlineSmall
-                            ?.copyWith(
-                              color: Theme.of(context).colorScheme.onSurface,
-                            ),
-                        textAlign: TextAlign.center,
+                      SegmentedButton(
+                        segments: [
+                          ButtonSegment(value: false, label: Text("LOGOWANIE")),
+                          ButtonSegment(
+                            value: true,
+                            label: Text("REJESTRACJA"),
+                          ),
+                        ],
+                        selected: {isRegisterMode},
+                        onSelectionChanged: (Set<bool> newSelection) {
+                          setState(() {
+                            isRegisterMode = newSelection.first;
+                          });
+                        },
                       ),
                       const SizedBox(height: 24),
                       Text(
@@ -130,7 +152,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 24),
                       AppTextField(
-                        controller: _usernameController,
+                        controller: _passwordController,
                         hintText: 'HASŁO, ZERO BEZPIECZEŃSTWA',
                         keyboardType: TextInputType.visiblePassword,
                       ),

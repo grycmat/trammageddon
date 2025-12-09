@@ -6,12 +6,12 @@ import 'package:trammageddon/data/tram_lines.dart';
 import 'package:trammageddon/model/category.model.dart';
 import 'package:trammageddon/model/incident.model.dart';
 import 'package:trammageddon/model/tram_line.model.dart';
-import 'package:trammageddon/routing/guards/auth_guard.dart';
 import 'package:trammageddon/screens/add_incident/app_dropdown.dart';
 import 'package:trammageddon/screens/add_incident/app_text_area.dart';
 import 'package:trammageddon/screens/add_incident/category_tag.dart';
 import 'package:trammageddon/screens/add_incident/statement_frame.dart';
 import 'package:trammageddon/screens/add_incident/wanted_border.dart';
+import 'package:trammageddon/services/auth.service.dart';
 import 'package:trammageddon/services/incident.service.dart';
 import 'package:trammageddon/widgets/app_text_field.dart';
 import 'package:trammageddon/widgets/stamped_button.dart';
@@ -31,7 +31,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
   TramLine? _selectedLine;
   final Set<Category> _selectedCategories = {};
   bool _isSubmitting = false;
-  final _authGuard = getIt.get<AuthGuard>();
+  final _authService = getIt.get<AuthService>();
   final _incidentService = getIt.get<IncidentService>();
 
   bool get _isFormValid {
@@ -77,7 +77,8 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
             .map((c) => c.label)
             .toList(), // Convert back to string list for now or update Incident model
         timestamp: DateTime.now(),
-        username: _authGuard.username ?? 'Anonim',
+        username: _authService.username,
+        userId: _authService.userId,
         city: 'KRAKÓW',
       );
 
