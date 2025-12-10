@@ -42,7 +42,7 @@ class _StampedButtonState extends State<StampedButton>
                 ? Theme.of(context).colorScheme.primaryContainer
                 : Theme.of(
                     context,
-                  ).colorScheme.onSurfaceVariant.withOpacity(0.3),
+                  ).colorScheme.onSurfaceVariant.withValues(alpha: 0.3),
             border: Border.all(
               color: isEnabled
                   ? Theme.of(context).scaffoldBackgroundColor
@@ -54,14 +54,14 @@ class _StampedButtonState extends State<StampedButton>
                     BoxShadow(
                       color: Theme.of(
                         context,
-                      ).colorScheme.onSurface.withOpacity(0.5),
+                      ).colorScheme.onSurface.withValues(alpha: 0.5),
                       blurRadius: _isPressed ? 2 : 15,
                       spreadRadius: 0,
                     ),
                     BoxShadow(
                       color: Theme.of(
                         context,
-                      ).colorScheme.onSurface.withOpacity(0.4),
+                      ).colorScheme.onSurface.withValues(alpha: 0.4),
                       blurRadius: _isPressed ? 2 : 5,
                       spreadRadius: 0,
                     ),

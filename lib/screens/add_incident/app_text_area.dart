@@ -33,7 +33,7 @@ class _AppTextAreaState extends State<AppTextArea> {
         hintStyle: Theme.of(context).textTheme.bodyMedium?.copyWith(
           color: Theme.of(
             context,
-          ).colorScheme.onSurfaceVariant.withOpacity(0.5),
+          ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
         ),
         filled: true,
         fillColor: Theme.of(context).scaffoldBackgroundColor,

@@ -41,7 +41,7 @@ class _AppTextFieldState extends State<AppTextField> {
           hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
             color: Theme.of(
               context,
-            ).colorScheme.onSurfaceVariant.withOpacity(0.5),
+            ).colorScheme.onSurfaceVariant.withValues(alpha: 0.5),
           ),
           filled: true,
           fillColor: Theme.of(context).scaffoldBackgroundColor,
