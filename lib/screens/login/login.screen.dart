@@ -13,6 +13,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isButtonEnabled = false;
@@ -22,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   void initState() {
     super.initState();
-    _usernameController.addListener(_checkFields);
+    _emailController.addListener(_checkFields);
     _passwordController.addListener(_checkFields);
     _loadSavedUsername();
   }
@@ -31,21 +32,21 @@ class _LoginScreenState extends State<LoginScreen> {
     final authService = getIt.get<AuthService>();
     final savedUsername = authService.username;
     if (savedUsername != null && savedUsername.isNotEmpty) {
-      _usernameController.text = savedUsername;
+      _emailController.text = savedUsername;
     }
   }
 
   void _checkFields() {
     setState(() {
       _isButtonEnabled =
-          _usernameController.text.isNotEmpty &&
+          _emailController.text.isNotEmpty &&
           _passwordController.text.isNotEmpty;
     });
   }
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -61,12 +62,12 @@ class _LoginScreenState extends State<LoginScreen> {
       final authService = getIt.get<AuthService>();
       if (isRegisterMode) {
         await authService.register(
-          _usernameController.text,
+          _emailController.text,
           _passwordController.text,
         );
       } else {
         await authService.login(
-          _usernameController.text,
+          _emailController.text,
           _passwordController.text,
         );
       }
@@ -123,6 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       SegmentedButton(
+                        showSelectedIcon: false,
                         segments: [
                           ButtonSegment(value: false, label: Text("LOGOWANIE")),
                           ButtonSegment(
@@ -137,6 +139,28 @@ class _LoginScreenState extends State<LoginScreen> {
                           });
                         },
                       ),
+                      isRegisterMode
+                          ? const SizedBox(height: 24)
+                          : const SizedBox.shrink(),
+                      isRegisterMode
+                          ? Text(
+                              'NAZWA',
+                              style: Theme.of(context).textTheme.titleSmall
+                                  ?.copyWith(
+                                    color: Theme.of(
+                                      context,
+                                    ).colorScheme.onSurface,
+                                  ),
+                            )
+                          : const SizedBox.shrink(),
+                      const SizedBox(height: 8),
+                      isRegisterMode
+                          ? AppTextField(
+                              controller: _usernameController,
+                              hintText: 'TAK PODPISZESZ SWOJE ŻALE',
+                              keyboardType: TextInputType.text,
+                            )
+                          : SizedBox.shrink(),
                       const SizedBox(height: 24),
                       Text(
                         'EMAIL',
@@ -146,14 +170,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 8),
                       AppTextField(
-                        controller: _usernameController,
-                        hintText: 'TAK PODPISZESZ SWOJE ŻALE',
+                        controller: _emailController,
+                        hintText: 'NA SPAM',
                         keyboardType: TextInputType.emailAddress,
                       ),
                       const SizedBox(height: 24),
+                      Text(
+                        'HASŁO',
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
                       AppTextField(
                         controller: _passwordController,
-                        hintText: 'HASŁO, ZERO BEZPIECZEŃSTWA',
+                        hintText: 'ZERO BEZPIECZEŃSTWA',
                         keyboardType: TextInputType.visiblePassword,
                       ),
                     ],
