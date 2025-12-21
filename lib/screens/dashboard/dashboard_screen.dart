@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:trammageddon/model/ranking.model.dart';
-import 'package:trammageddon/screens/add_incident/statement_frame.dart';
-import 'package:trammageddon/screens/dashboard/data_box.dart';
-import 'package:trammageddon/screens/dashboard/top_ranking_item.dart';
+import 'package:trammageddon/screens/dashboard/all_incidents_count.dart';
+import 'package:trammageddon/screens/dashboard/my_all_incidents_count.dart';
+import 'package:trammageddon/screens/dashboard/my_today_incidents_count.dart';
+import 'package:trammageddon/screens/dashboard/today_incidents_count.dart';
+import 'package:trammageddon/screens/dashboard/top_ranking.dart';
 import 'package:trammageddon/widgets/new_incident_button.dart';
 
 class DashboardScreen extends StatelessWidget {
   DashboardScreen({super.key});
-
-  final List<Ranking> _topRankings = [
-    Ranking(rank: 1, line: '7', reports: 28),
-    Ranking(rank: 2, line: '14', reports: 22),
-    Ranking(rank: 3, line: '23', reports: 19),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -31,13 +26,9 @@ class DashboardScreen extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              Expanded(
-                child: DataBox(value: '78', label: 'OKROPIEŃSTW'),
-              ),
+              Expanded(child: TodayIncidentsCount()),
               const SizedBox(width: 16),
-              Expanded(
-                child: DataBox(value: '12', label: 'AKTYWNYCH STREF'),
-              ),
+              Expanded(child: AllIncidentsCount()),
             ],
           ),
           const SizedBox(height: 32),
@@ -51,13 +42,9 @@ class DashboardScreen extends StatelessWidget {
           const SizedBox(height: 12),
           Row(
             children: [
-              Expanded(
-                child: DataBox(value: '3', label: 'ZGŁOSZENIA DZIŚ'),
-              ),
+              Expanded(child: MyTodayIncidentsCount()),
               const SizedBox(width: 16),
-              Expanded(
-                child: DataBox(value: '142', label: 'SUMA ZGŁOSZEŃ'),
-              ),
+              Expanded(child: MyAllIncidentsCount()),
             ],
           ),
           const SizedBox(height: 32),
@@ -69,40 +56,12 @@ class DashboardScreen extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 12),
-          StatementFrame(
-            child: Column(
-              children: _topRankings.asMap().entries.map((entry) {
-                final isLast = entry.key == _topRankings.length - 1;
-                return Column(
-                  children: [
-                    TopRankingItem(
-                      rank: entry.value.rank,
-                      line: entry.value.line,
-                      reports: entry.value.reports,
-                    ),
-                    if (!isLast)
-                      Container(
-                        height: 1,
-                        margin: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(
-                              color: Theme.of(
-                                context,
-                              ).colorScheme.onSurface.withValues(alpha: 0.3),
-                              width: 1,
-                              style: BorderStyle.solid,
-                            ),
-                          ),
-                        ),
-                      ),
-                  ],
-                );
-              }).toList(),
-            ),
-          ),
+          TopRanking(),
           const SizedBox(height: 16),
-          const NewIncidentButton(),
+          Padding(
+            padding: const EdgeInsets.only(top: 18.0),
+            child: const NewIncidentButton(),
+          ),
           const SizedBox(height: 16),
         ],
       ),

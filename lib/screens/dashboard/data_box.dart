@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 
 class DataBox extends StatelessWidget {
-  final String value;
+  final int value;
   final String label;
 
-  const DataBox({
-    super.key,
-    required this.value,
-    required this.label,
-  });
+  const DataBox({super.key, required this.value, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +21,18 @@ class DataBox extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            value,
+            value.toString(),
             style: Theme.of(context).textTheme.displaySmall?.copyWith(
-                  fontFamily: 'ChivoMono',
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+              fontFamily: 'ChivoMono',
+              color: Theme.of(context).colorScheme.primary,
+            ),
           ),
           const SizedBox(height: 4),
           Text(
             label,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
+              color: Theme.of(context).colorScheme.onSurface,
+            ),
             textAlign: TextAlign.center,
           ),
         ],

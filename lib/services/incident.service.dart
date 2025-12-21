@@ -1,17 +1,32 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:trammageddon/model/incident.model.dart';
+import 'package:trammageddon/model/ranking_item.model.dart';
 import 'package:trammageddon/services/auth.service.dart';
 
 var getIt = GetIt.I;
 
 class IncidentService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final String _collection = 'incidents';
+  final String _incidents = 'incidents';
+  final String _incidentsByLine = 'incidents_by_line';
 
   Future<void> addIncident(Incident incident) async {
     try {
-      await _firestore.collection(_collection).add(incident.toMap());
+      final batch = _firestore.batch();
+
+      final incidentRef = _firestore.collection(_incidents).doc();
+      batch.set(incidentRef, incident.toMap());
+
+      final lineRef = _firestore
+          .collection(_incidentsByLine)
+          .doc(incident.line);
+      batch.set(lineRef, {
+        'line': incident.line,
+        'incidentsCount': FieldValue.increment(1),
+      }, SetOptions(merge: true));
+
+      await batch.commit();
     } catch (e) {
       throw Exception('Failed to upload incident: $e');
     }
@@ -20,7 +35,7 @@ class IncidentService {
   Future<int?> getAllIncidentsCount() async {
     try {
       return await _firestore
-          .collection(_collection)
+          .collection(_incidents)
           .count()
           .get()
           .then((res) => res.count);
@@ -29,9 +44,17 @@ class IncidentService {
     }
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getAllIncidents() async {
+  Future<List<Incident>> getAllIncidents() async {
     try {
-      return await _firestore.collection(_collection).get();
+      return await _firestore
+          .collection(_incidents)
+          .get()
+          .then(
+            (response) => response.docs
+                .map((doc) => Incident.fromFirestore(doc))
+                .toList(),
+          );
+      ;
     } catch (e) {
       throw Exception('Failed to fetch incidents: $e');
     }
@@ -40,7 +63,7 @@ class IncidentService {
   Future<int?> getMyIncidentsCount() async {
     try {
       return await _firestore
-          .collection(_collection)
+          .collection(_incidents)
           .where('userId', isEqualTo: getIt.get<AuthService>().userId)
           .count()
           .get()
@@ -53,7 +76,7 @@ class IncidentService {
   Future<int?>? getTodayIncidentsCount() async {
     try {
       return await _firestore
-          .collection(_collection)
+          .collection(_incidents)
           .where('date', isEqualTo: DateTime.now().toString())
           .count()
           .get()
@@ -63,12 +86,17 @@ class IncidentService {
     }
   }
 
-  Future<Future<QuerySnapshot<Map<String, dynamic>>>> getMyIncidents() async {
+  Future<List<Incident>> getMyIncidents() async {
     try {
       return _firestore
-          .collection(_collection)
+          .collection(_incidents)
           .where('userId', isEqualTo: getIt.get<AuthService>().userId)
-          .get();
+          .get()
+          .then(
+            (response) => response.docs
+                .map((doc) => Incident.fromFirestore(doc))
+                .toList(),
+          );
     } catch (e) {
       throw Exception('Failed to fetch incidents: $e');
     }
@@ -77,13 +105,30 @@ class IncidentService {
   Future<int?> getMyTodayIncidentsCount() async {
     try {
       return _firestore
-          .collection(_collection)
+          .collection(_incidents)
           .where('userId', isEqualTo: getIt.get<AuthService>().userId)
           .count()
           .get()
           .then((res) => res.count);
     } catch (e) {
       throw Exception('Failed to fetch incidents: $e');
+    }
+  }
+
+  Future<List<RankingItem>> getTopRankings() async {
+    try {
+      return await _firestore
+          .collection(_incidentsByLine)
+          .orderBy('incidentsCount', descending: true)
+          .limit(3)
+          .get()
+          .then(
+            (res) => res.docs
+                .map((doc) => (RankingItem.fromFirestore(doc)))
+                .toList(),
+          );
+    } catch (e) {
+      throw Exception('Failed to fetch incidents by line: $e');
     }
   }
 }
