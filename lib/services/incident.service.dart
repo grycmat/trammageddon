@@ -10,6 +10,7 @@ class IncidentService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final String _incidents = 'incidents';
   final String _incidentsByLine = 'incidents_by_line';
+  final String _topCategories = 'top_categories';
 
   Future<void> addIncident(Incident incident) async {
     try {
@@ -115,12 +116,12 @@ class IncidentService {
     }
   }
 
-  Future<List<RankingItem>> getTopRankings() async {
+  Future<List<RankingItem>> getTopRankings({int limit = 3}) async {
     try {
       return await _firestore
           .collection(_incidentsByLine)
           .orderBy('incidentsCount', descending: true)
-          .limit(3)
+          .limit(limit)
           .get()
           .then(
             (res) => res.docs

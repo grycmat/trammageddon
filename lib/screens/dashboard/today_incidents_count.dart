@@ -14,7 +14,7 @@ class TodayIncidentsCount extends StatelessWidget {
       future: getIt.get<IncidentService>().getTodayIncidentsCount(),
       builder: (_, AsyncSnapshot<int?> snapshot) {
         var value = snapshot.data ?? 0;
-        return DataBox(value: value, label: 'OKROPIEŃSTW');
+        return DataBox(value: value, label: 'OKROPIEŃSTW DZIŚ');
       },
     );
   }

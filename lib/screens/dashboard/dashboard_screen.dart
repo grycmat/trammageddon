@@ -4,7 +4,6 @@ import 'package:trammageddon/screens/dashboard/my_all_incidents_count.dart';
 import 'package:trammageddon/screens/dashboard/my_today_incidents_count.dart';
 import 'package:trammageddon/screens/dashboard/today_incidents_count.dart';
 import 'package:trammageddon/screens/dashboard/top_ranking.dart';
-import 'package:trammageddon/widgets/new_incident_button.dart';
 
 class DashboardScreen extends StatelessWidget {
   DashboardScreen({super.key});
@@ -17,7 +16,7 @@ class DashboardScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            'DZIŚ W MIEŚCIE',
+            'CO TAM W MIEŚCIE',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
               color: Theme.of(context).colorScheme.onSurface,
             ),
@@ -57,12 +56,6 @@ class DashboardScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           TopRanking(),
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.only(top: 18.0),
-            child: const NewIncidentButton(),
-          ),
-          const SizedBox(height: 16),
         ],
       ),
     );
