@@ -6,6 +6,7 @@ import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/screens/add_incident/add_incident.screen.dart';
 import 'package:trammageddon/screens/dashboard/dashboard_screen.dart';
 import 'package:trammageddon/screens/hall_of_defame/hall_of_defame_screen.dart';
+import 'package:trammageddon/screens/line_details/line_details_screen.dart';
 import 'package:trammageddon/screens/login/login.screen.dart';
 import 'package:trammageddon/screens/settings/settings_screen.dart';
 import 'package:trammageddon/services/auth.service.dart';
@@ -51,6 +52,11 @@ class AppRouter {
             builder: (context, state) => const SettingsScreen(),
           ),
         ],
+      ),
+      GoRoute(
+        path: RouteNames.lineDetails,
+        name: 'line-details',
+        builder: (context, state) => const LineDetailsScreen(lineNumber: '1'),
       ),
       GoRoute(
         path: RouteNames.addIncident,
