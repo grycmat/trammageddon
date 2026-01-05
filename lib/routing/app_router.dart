@@ -32,7 +32,7 @@ class AppRouter {
 
     routes: [
       ShellRoute(
-        builder: (context, state, child) => ScaffoldWithNav(child: child),
+        builder: (context, state, child) => ScaffoldWithNav(routerState: state, child: child),
         routes: [
           GoRoute(
             path: RouteNames.home,
