@@ -97,7 +97,28 @@ The app uses a custom brutalist design with:
 Firebase services:
 - **Firebase Auth**: Email/password authentication
 - **Cloud Firestore**: Incident data storage
-- Firebase credentials stored in `lib/firebase_options.dart` (gitignored)
+- Firebase credentials stored in `lib/firebase_options.dart`
+
+### Firestore Data Structure
+```
+incidents/
+├── {docId}
+│   ├── line: "1"
+│   ├── vehicleNumber: "optional"
+│   ├── description: "..."
+│   ├── categories: ["BRUD", "ZIMNICA"]
+│   ├── timestamp: Timestamp
+│   ├── username: "user@email.com"
+│   ├── userId: "firebase-uid"
+│   └── city: "KRAKÓW"
+
+incidents_by_line/
+├── {lineNumber}
+│   ├── line: "1"
+│   └── incidentsCount: 42
+```
+
+Incident creation uses batch writes to atomically update both collections.
 
 ### Platform-Specific
 - **Android**: Kotlin-based, uses Gradle KTS for build configuration
@@ -213,4 +234,27 @@ context.pop();
 ```
 
 ### Route Names
-Use constants from `RouteNames` class rather than hardcoded strings.
+Use constants from `RouteNames` class rather than hardcoded strings:
+- `RouteNames.home` → `/`
+- `RouteNames.login` → `/login`
+- `RouteNames.addIncident` → `/add-incident`
+- `RouteNames.hallOfDefame` → `/hall-of-defame`
+- `RouteNames.settings` → `/settings`
+
+## Adding New Features
+
+### Adding a New Service
+1. Create `lib/services/my_service.dart`
+2. Register in `main.dart`:
+   ```dart
+   getIt.registerSingleton<MyService>(MyService());
+   // or for async initialization:
+   getIt.registerSingletonAsync<MyService>(() => MyService.init());
+   ```
+3. Access via `getIt.get<MyService>()`
+
+### Adding a New Screen
+1. Create `lib/screens/feature_name/feature_name_screen.dart`
+2. Add route constant to `lib/routing/route_names.dart`
+3. Add route to `lib/routing/app_router.dart` (inside ShellRoute for nav bar, outside for full-screen)
+4. Navigate with `context.go(RouteNames.featureName)`

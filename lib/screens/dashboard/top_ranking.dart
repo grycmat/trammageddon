@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
 import 'package:trammageddon/model/ranking_item.model.dart';
+import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/screens/add_incident/statement_frame.dart';
 import 'package:trammageddon/screens/dashboard/top_ranking_item.dart';
 import 'package:trammageddon/services/incident.service.dart';
@@ -27,36 +29,40 @@ class TopRanking extends StatelessWidget {
 
           var index = 1;
 
-          return StatementFrame(
-            child: Column(
-              children: [
-                for (var entry in topRankings)
-                  Column(
-                    children: [
-                      TopRankingItem(
-                        rank: index++,
-                        line: entry.line,
-                        reports: entry.incidentsCount,
-                      ),
-                      if (index == topRankings.length)
-                        Container(
-                          height: 1,
-                          margin: const EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withValues(alpha: 0.3),
-                                width: 1,
-                                style: BorderStyle.solid,
+          return InkWell(
+            onTap: () {
+              context.push(RouteNames.lineDetails);
+            },
+            child: StatementFrame(
+              child: Column(
+                children: [
+                  for (var entry in topRankings)
+                    Column(
+                      children: [
+                        TopRankingItem(
+                          rank: index++,
+                          line: entry.line,
+                          reports: entry.incidentsCount,
+                        ),
+                        if (index == topRankings.length)
+                          Container(
+                            height: 1,
+                            margin: const EdgeInsets.symmetric(vertical: 12),
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color: Theme.of(context).colorScheme.onSurface
+                                      .withValues(alpha: 0.3),
+                                  width: 1,
+                                  style: BorderStyle.solid,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                    ],
-                  ),
-              ],
+                      ],
+                    ),
+                ],
+              ),
             ),
           );
         }
