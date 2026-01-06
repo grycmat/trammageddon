@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
+import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/screens/add_incident/app_dropdown.dart';
+import 'package:trammageddon/services/auth.service.dart';
 import 'package:trammageddon/services/preferences.service.dart';
 import 'package:trammageddon/widgets/app_text_field.dart';
 import 'package:trammageddon/widgets/stamped_button.dart';
@@ -14,6 +17,7 @@ class SettingsScreen extends StatefulWidget {
 
 class _SettingsScreenState extends State<SettingsScreen> {
   final _usernameController = TextEditingController();
+  final _authService = GetIt.I.get<AuthService>();
   String? _selectedTheme;
   String? _selectedCity;
   bool _isSaving = false;
@@ -22,6 +26,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final List<String> _themeOptions = ['JASNY', 'CIEMNY', 'SYSTEMOWY'];
 
   final List<String> _cityOptions = ['KRAKÓW'];
+
+  bool get _isAnonymous => _authService.isAnonymous;
 
   @override
   void initState() {
@@ -125,6 +131,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
   }
 
+  Future<void> _handleLogout() async {
+    await _authService.logout();
+    if (mounted) {
+      context.go(RouteNames.login);
+    }
+  }
+
+  Future<void> _handleRegister() async {
+    await _authService.logout();
+    if (mounted) {
+      context.go(RouteNames.login);
+    }
+  }
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -191,22 +211,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                AppTextField(
-                  controller: _usernameController,
-                  hintText: 'WPROWADŹ NAZWĘ',
-                ),
-                const SizedBox(height: 16),
-                _isSaving
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
-                      )
-                    : StampedButton(
-                        onPressed: _hasUsernameChanged ? _saveUsername : null,
-                        icon: Icons.save,
-                        label: 'ZAPISZ',
+                if (_isAnonymous)
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Theme.of(context).colorScheme.outline,
+                        width: 2,
                       ),
+                    ),
+                    child: Text(
+                      'ANONIM',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  )
+                else ...[
+                  AppTextField(
+                    controller: _usernameController,
+                    hintText: 'WPROWADŹ NAZWĘ',
+                  ),
+                  const SizedBox(height: 16),
+                  _isSaving
+                      ? Center(
+                          child: CircularProgressIndicator(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                        )
+                      : StampedButton(
+                          onPressed: _hasUsernameChanged ? _saveUsername : null,
+                          icon: Icons.save,
+                          label: 'ZAPISZ',
+                        ),
+                ],
               ],
             ),
           ),
@@ -250,6 +288,77 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   textAlign: TextAlign.center,
                 ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 24),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary,
+                width: 3,
+              ),
+            ),
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  'KONTO',
+                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                if (_isAnonymous) ...[
+                  StampedButton(
+                    onPressed: _handleRegister,
+                    icon: Icons.person_add,
+                    label: 'ZAREJESTRUJ SIĘ',
+                  ),
+                  const SizedBox(height: 12),
+                  OutlinedButton(
+                    onPressed: _handleLogout,
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.error,
+                        width: 2,
+                      ),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                    ),
+                    child: Text(
+                      'WYJDŹ',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ] else
+                  OutlinedButton(
+                    onPressed: _handleLogout,
+                    style: OutlinedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      side: BorderSide(
+                        color: Theme.of(context).colorScheme.error,
+                        width: 2,
+                      ),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
+                      ),
+                    ),
+                    child: Text(
+                      'WYLOGUJ',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.error,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
               ],
             ),
           ),

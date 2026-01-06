@@ -22,10 +22,12 @@ class AppRouter {
 
     redirect: (BuildContext context, GoRouterState state) async {
       final userId = authService.userId;
+      final isAnonymous = authService.isAnonymous;
       final isLoginRoute = state.matchedLocation == RouteNames.login;
+      final isAuthenticated = userId != null || isAnonymous;
 
       if (isLoginRoute) {
-        return userId != null ? RouteNames.home : RouteNames.login;
+        return isAuthenticated ? RouteNames.home : RouteNames.login;
       }
 
       return null;

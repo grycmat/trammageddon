@@ -36,6 +36,7 @@ Trammageddon is a Flutter mobile application for reporting and tracking tram (pu
   - `dashboard/` - Dashboard screen with data visualization
   - `hall_of_defame/` - Rankings screen with detailed entries
   - `settings/` - User settings screen
+  - `line_details/` - Line details screen with incident list
 - `lib/widgets/` - Reusable UI components
 - `lib/theme/` - Theme and styling
   - `theme.dart` - Defines `AppTheme` with dark and light themes
@@ -43,7 +44,7 @@ Trammageddon is a Flutter mobile application for reporting and tracking tram (pu
 - `lib/routing/` - Navigation configuration
   - `app_router.dart` - GoRouter setup with auth redirects and ShellRoute
   - `route_names.dart` - Centralized route path constants
-- `lib/model/` - Data models (Ranking, Incident, User, Category, City, TramLine)
+- `lib/model/` - Data models (RankingItem, Incident, User, Category, City, TramLine)
 - `lib/services/` - Business logic services
   - `auth.service.dart` - Firebase Auth + SharedPreferences
   - `incident.service.dart` - Firestore incident operations
@@ -82,7 +83,7 @@ The app uses `go_router` with authentication guards:
 - `AuthService` extends `ChangeNotifier` and triggers route refreshes on auth state changes
 - Initial route is `/login` with redirect to `/` if authenticated
 - Uses `ShellRoute` pattern for persistent bottom navigation
-- Routes: `/login`, `/` (home), `/add-incident`, `/hall-of-defame`, `/settings`
+- Routes: `/login`, `/` (home), `/add-incident`, `/hall-of-defame`, `/settings`, `/line-details`
 
 ### Theme System
 The app uses a custom brutalist design with:
@@ -116,9 +117,13 @@ incidents_by_line/
 ├── {lineNumber}
 │   ├── line: "1"
 │   └── incidentsCount: 42
+
+top_categories/
+├── {categoryId}
+│   └── (category statistics)
 ```
 
-Incident creation uses batch writes to atomically update both collections.
+Incident creation uses batch writes to atomically update both `incidents` and `incidents_by_line` collections.
 
 ### Platform-Specific
 - **Android**: Kotlin-based, uses Gradle KTS for build configuration
@@ -226,6 +231,9 @@ await authService.login(email, password);
 
 ## Navigation Patterns
 
+### FAB Visibility
+The `ScaffoldWithNav` controls FAB visibility per route. Routes listed in `skipAppBarRoutes` hide the FAB (currently `/hall-of-defame` and `/settings`).
+
 ### Basic Navigation with GoRouter
 ```dart
 context.go(RouteNames.addIncident);
@@ -240,6 +248,7 @@ Use constants from `RouteNames` class rather than hardcoded strings:
 - `RouteNames.addIncident` → `/add-incident`
 - `RouteNames.hallOfDefame` → `/hall-of-defame`
 - `RouteNames.settings` → `/settings`
+- `RouteNames.lineDetails` → `/line-details`
 
 ## Adding New Features
 

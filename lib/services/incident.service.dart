@@ -4,7 +4,7 @@ import 'package:trammageddon/model/incident.model.dart';
 import 'package:trammageddon/model/ranking_item.model.dart';
 import 'package:trammageddon/services/auth.service.dart';
 
-var getIt = GetIt.I;
+final getIt = GetIt.I;
 
 class IncidentService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -55,17 +55,20 @@ class IncidentService {
                 .map((doc) => Incident.fromFirestore(doc))
                 .toList(),
           );
-      ;
     } catch (e) {
       throw Exception('Failed to fetch incidents: $e');
     }
   }
 
   Future<int?> getMyIncidentsCount() async {
+    final userId = getIt.get<AuthService>().userId;
+    if (userId == null || userId.isEmpty) {
+      return 0;
+    }
     try {
       return await _firestore
           .collection(_incidents)
-          .where('userId', isEqualTo: getIt.get<AuthService>().userId)
+          .where('userId', isEqualTo: userId)
           .count()
           .get()
           .then((res) => res.count);
@@ -88,10 +91,14 @@ class IncidentService {
   }
 
   Future<List<Incident>> getMyIncidents() async {
+    final userId = getIt.get<AuthService>().userId;
+    if (userId == null || userId.isEmpty) {
+      return [];
+    }
     try {
       return _firestore
           .collection(_incidents)
-          .where('userId', isEqualTo: getIt.get<AuthService>().userId)
+          .where('userId', isEqualTo: userId)
           .get()
           .then(
             (response) => response.docs
@@ -104,10 +111,14 @@ class IncidentService {
   }
 
   Future<int?> getMyTodayIncidentsCount() async {
+    final userId = getIt.get<AuthService>().userId;
+    if (userId == null || userId.isEmpty) {
+      return 0;
+    }
     try {
       return _firestore
           .collection(_incidents)
-          .where('userId', isEqualTo: getIt.get<AuthService>().userId)
+          .where('userId', isEqualTo: userId)
           .count()
           .get()
           .then((res) => res.count);
