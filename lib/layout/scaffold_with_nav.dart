@@ -16,7 +16,6 @@ class ScaffoldWithNav extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(routerState.fullPath);
     return Scaffold(
       appBar: appBar,
       body: Padding(padding: const EdgeInsets.only(top: 32), child: child),
