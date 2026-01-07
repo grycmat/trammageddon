@@ -113,14 +113,12 @@ class _LineDetailsScreenState extends State<LineDetailsScreen> {
   Widget build(BuildContext context) {
 
     return Scaffold(
-      body: Column(
-        children: [
-          LineDetailsHeader(
-            lineNumber: widget.lineNumber,
-            totalReports: _incidents.length,
-            onBack: () => context.pop(),
-          ),
-          Expanded(
+      appBar: LineDetailsHeader(
+        lineNumber: widget.lineNumber,
+        totalReports: _incidents.length,
+        onBack: () => context.pop(),
+      ),
+      body: Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
               itemCount: _incidents.length,
@@ -139,8 +137,8 @@ class _LineDetailsScreenState extends State<LineDetailsScreen> {
               },
             ),
           ),
-        ],
-      ),
+
+
     );
   }
 }
