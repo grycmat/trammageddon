@@ -4,14 +4,12 @@ class LineDetailsHeader extends StatelessWidget {
   final String lineNumber;
   final int totalReports;
   final VoidCallback? onBack;
-  final VoidCallback? onFilter;
 
   const LineDetailsHeader({
     super.key,
     required this.lineNumber,
     required this.totalReports,
     this.onBack,
-    this.onFilter,
   });
 
   @override
@@ -54,11 +52,6 @@ class LineDetailsHeader extends StatelessWidget {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.filter_alt),
-                    onPressed: onFilter ?? () {},
-                    color: colorScheme.primary,
                   ),
                 ],
               ),

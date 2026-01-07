@@ -111,9 +111,6 @@ class _LineDetailsScreenState extends State<LineDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    final textTheme = theme.textTheme;
 
     return Scaffold(
       body: Column(
@@ -122,7 +119,6 @@ class _LineDetailsScreenState extends State<LineDetailsScreen> {
             lineNumber: widget.lineNumber,
             totalReports: _incidents.length,
             onBack: () => context.pop(),
-            onFilter: () {},
           ),
           Expanded(
             child: ListView.builder(
@@ -144,72 +140,6 @@ class _LineDetailsScreenState extends State<LineDetailsScreen> {
             ),
           ),
         ],
-      ),
-      bottomNavigationBar: ClipRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-          child: Container(
-            decoration: BoxDecoration(
-              color: theme.scaffoldBackgroundColor.withValues(alpha: 0.9),
-              border: Border(
-                top: BorderSide(
-                  color: colorScheme.primary,
-                  width: 2,
-                ),
-              ),
-            ),
-            child: SafeArea(
-              top: false,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Transform.rotate(
-                  angle: -0.017,
-                  child: Material(
-                    color: colorScheme.secondary,
-                    child: InkWell(
-                      onTap: () {},
-                      child: Container(
-                        height: 64,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: theme.scaffoldBackgroundColor,
-                            width: 3,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: colorScheme.onSurface.withValues(alpha: 0.5),
-                              blurRadius: 15,
-                              spreadRadius: 0,
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.add_alert,
-                              color: theme.scaffoldBackgroundColor,
-                              size: 32,
-                            ),
-                            const SizedBox(width: 8),
-                            Text(
-                              'ZGŁOŚ NOWY INCYDENT',
-                              style: textTheme.titleMedium?.copyWith(
-                                color: theme.scaffoldBackgroundColor,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 2.0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }
