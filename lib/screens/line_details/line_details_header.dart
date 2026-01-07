@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 
 class LineDetailsHeader extends StatelessWidget implements PreferredSizeWidget {
   final String lineNumber;
-  final int totalReports;
   final VoidCallback? onBack;
 
   const LineDetailsHeader({
     super.key,
     required this.lineNumber,
-    required this.totalReports,
     this.onBack,
   });
 

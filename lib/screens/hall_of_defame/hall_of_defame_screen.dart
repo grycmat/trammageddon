@@ -80,9 +80,7 @@ class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
                   ),
                   padding: const EdgeInsets.all(16),
                   child: FutureBuilder(
-                    future: getIt.get<IncidentService>().getTopRankings(
-                      limit: 10,
-                    ),
+                    future: getIt.get<IncidentService>().getTopRankings(),
                     builder:
                         (
                           BuildContext context,
@@ -113,8 +111,8 @@ class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
                   ),
                 ),
                 const SizedBox(height: 32),
-                const TopCategories(),
-                const SizedBox(height: 32),
+                // const TopCategories(),
+                // const SizedBox(height: 32),
               ],
             ),
           ),

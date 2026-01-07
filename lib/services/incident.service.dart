@@ -11,6 +11,8 @@ class IncidentService {
   final String _incidents = 'incidents';
   final String _incidentsByLine = 'incidents_by_line';
   final String _topCategories = 'top_categories';
+  final int _incidentsByLineLimit = 100;
+
 
   Future<void> addIncident(Incident incident) async {
     try {
@@ -116,7 +118,7 @@ class IncidentService {
     }
   }
 
-  Future<List<RankingItem>> getTopRankings({int limit = 3}) async {
+  Future<List<RankingItem>> getTopRankings({int limit = 5}) async {
     try {
       return await _firestore
           .collection(_incidentsByLine)
@@ -128,6 +130,23 @@ class IncidentService {
                 .map((doc) => (RankingItem.fromFirestore(doc)))
                 .toList(),
           );
+    } catch (e) {
+      throw Exception('Failed to fetch incidents by line: $e');
+    }
+  }
+
+  Future<List<Incident>> getIncidentsForLine({required String line}) async {
+    try {
+      return await _firestore
+          .collection(_incidents)
+          .where('line', isEqualTo: line)
+          .limit(_incidentsByLineLimit)
+          .get()
+          .then(
+            (response) => response.docs
+                .map((doc) => Incident.fromFirestore(doc))
+                .toList(),
+      );
     } catch (e) {
       throw Exception('Failed to fetch incidents by line: $e');
     }

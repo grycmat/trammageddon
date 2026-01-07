@@ -55,8 +55,8 @@ class AppRouter {
       ),
       GoRoute(
         path: RouteNames.lineDetails,
-        name: 'line-details',
-        builder: (context, state) => const LineDetailsScreen(lineNumber: '1'),
+        name: 'line-details:lineNumber',
+        builder: (context, state) => LineDetailsScreen(lineNumber: state.pathParameters['lineNumber']!),
       ),
       GoRoute(
         path: RouteNames.addIncident,
