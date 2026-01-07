@@ -67,6 +67,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
     setState(() => _isSubmitting = true);
 
     try {
+      final isAnonymous = _authService.isAnonymous;
       final incident = Incident(
         line: _selectedLine!.number,
         vehicleNumber: _vehicleNumberController.text.isNotEmpty
@@ -75,10 +76,10 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
         description: _descriptionController.text,
         categories: _selectedCategories
             .map((c) => c.label)
-            .toList(), // Convert back to string list for now or update Incident model
+            .toList(),
         timestamp: DateTime.now(),
-        username: _authService.username,
-        userId: _authService.userId,
+        username: isAnonymous ? 'ANONIM' : _authService.username ?? '',
+        userId: isAnonymous ? '' : _authService.userId ?? '',
         city: 'KRAKÓW',
       );
 
@@ -253,7 +254,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
             child: SafeArea(
               top: false,
               child: _isSubmitting
-                  ? CircularProgressIndicator()
+                  ? const Center(child: CircularProgressIndicator())
                   : StampedButton(
                       onPressed: _isFormValid ? _handleSubmit : null,
                       icon: Icons.gavel,

@@ -13,6 +13,7 @@ class PreferencesService {
   final String _keyUsername = 'username';
   final String _keyThemeMode = 'theme_mode';
   final String _keyUserId = 'user_id';
+  final String _keyIsAnonymous = 'is_anonymous';
 
   Future<void> saveUsername(String username) async {
     await _preferences.setString(_keyUsername, username);
@@ -28,6 +29,14 @@ class PreferencesService {
 
   String? getUserId() {
     return _preferences.getString(_keyUserId);
+  }
+
+  Future<void> saveIsAnonymous(bool value) async {
+    await _preferences.setBool(_keyIsAnonymous, value);
+  }
+
+  bool getIsAnonymous() {
+    return _preferences.getBool(_keyIsAnonymous) ?? false;
   }
 
   Future<void> clearUsername() async {

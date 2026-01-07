@@ -5,7 +5,12 @@ import 'package:trammageddon/widgets/nav_bar.dart';
 import 'package:trammageddon/widgets/new_incident_fab.dart';
 
 class ScaffoldWithNav extends StatelessWidget {
-  const ScaffoldWithNav({super.key, required this.routerState, required this.child, appBar});
+  const ScaffoldWithNav({
+    super.key,
+    required this.routerState,
+    required this.child,
+    appBar,
+  });
 
   final GoRouterState routerState;
   final Widget child;
@@ -21,7 +26,7 @@ class ScaffoldWithNav extends StatelessWidget {
       body: Padding(padding: const EdgeInsets.only(top: 32), child: child),
       bottomNavigationBar: const NavBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: _shouldShowFab() ? NewIncidentFab() : SizedBox.shrink(),
+      floatingActionButton: NewIncidentFab(show: _shouldShowFab()),
     );
   }
 }
