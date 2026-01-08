@@ -66,7 +66,7 @@ class TopRanking extends StatelessWidget {
             ),
           );
         }
-        return Container();
+        return Center(child: Text('PUSTO...'));
       },
     );
   }

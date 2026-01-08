@@ -104,7 +104,7 @@ class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
                               if (snapshot.connectionState ==
                                   ConnectionState.active)
                                 const CircularProgressIndicator(),
-                              if (snapshot.hasData) _generateList(snapshot),
+                              if (snapshot.hasData) _generateList(snapshot) else Center(child: Text('PUSTO...')),
                             ],
                           );
                         },

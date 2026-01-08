@@ -6,6 +6,7 @@ import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/screens/add_incident/add_incident.screen.dart';
 import 'package:trammageddon/screens/dashboard/dashboard_screen.dart';
 import 'package:trammageddon/screens/hall_of_defame/hall_of_defame_screen.dart';
+import 'package:trammageddon/screens/incidents_list/incidents_list_screen.dart';
 import 'package:trammageddon/screens/line_details/line_details_screen.dart';
 import 'package:trammageddon/screens/login/login.screen.dart';
 import 'package:trammageddon/screens/settings/settings_screen.dart';
@@ -35,7 +36,8 @@ class AppRouter {
 
     routes: [
       ShellRoute(
-        builder: (context, state, child) => ScaffoldWithNav(routerState: state, child: child),
+        builder: (context, state, child) =>
+            ScaffoldWithNav(routerState: state, child: child),
         routes: [
           GoRoute(
             path: RouteNames.home,
@@ -49,6 +51,11 @@ class AppRouter {
             builder: (context, state) => const HallOfDefameScreen(),
           ),
           GoRoute(
+            path: RouteNames.incidentsList,
+            name: 'incidents-list',
+            builder: (context, state) => const IncidentsListScreen(),
+          ),
+          GoRoute(
             path: RouteNames.settings,
             name: 'settings',
             builder: (context, state) => const SettingsScreen(),
@@ -58,7 +65,8 @@ class AppRouter {
       GoRoute(
         path: RouteNames.lineDetails,
         name: 'line-details:lineNumber',
-        builder: (context, state) => LineDetailsScreen(lineNumber: state.pathParameters['lineNumber']!),
+        builder: (context, state) =>
+            LineDetailsScreen(lineNumber: state.pathParameters['lineNumber']!),
       ),
       GoRoute(
         path: RouteNames.addIncident,
