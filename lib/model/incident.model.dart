@@ -45,9 +45,9 @@ class Incident {
       description: data['description'] ?? '',
       categories: List<String>.from(data['categories'] ?? []),
       timestamp: (data['timestamp'] as Timestamp).toDate(),
-      username: data['username'],
-      userId: data['userId'],
-      city: data['city'],
+      username: data['username'] ?? '',
+      userId: data['userId'] ?? '',
+      city: data['city'] ?? '',
     );
   }
 }

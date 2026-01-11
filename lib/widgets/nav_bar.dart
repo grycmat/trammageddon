@@ -93,6 +93,7 @@ class _NavBarState extends State<NavBar> {
                   setState(() {
                     selectedIndex = 2;
                   });
+                  context.go(RouteNames.incidentsList);
                 },
               ),
               _buildNavItem(
