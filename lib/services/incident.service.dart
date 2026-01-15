@@ -82,7 +82,7 @@ class IncidentService {
     try {
       return await _firestore
           .collection(_incidents)
-          .where('date', isEqualTo: DateTime.now().toString())
+          .where('timestamp', isEqualTo: Timestamp.fromDate(DateTime.now()))
           .count()
           .get()
           .then((res) => res.count);
@@ -120,6 +120,7 @@ class IncidentService {
       return _firestore
           .collection(_incidents)
           .where('userId', isEqualTo: userId)
+          .where('timestamp', isEqualTo: Timestamp.fromDate(DateTime.now()))
           .count()
           .get()
           .then((res) => res.count);
