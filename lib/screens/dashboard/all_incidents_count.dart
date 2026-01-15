@@ -3,7 +3,7 @@ import 'package:get_it/get_it.dart';
 import 'package:trammageddon/screens/dashboard/data_box.dart';
 import 'package:trammageddon/services/incident.service.dart';
 
-var gitIt = GetIt.I;
+var getIt = GetIt.I;
 
 class AllIncidentsCount extends StatelessWidget {
   const AllIncidentsCount({super.key});
