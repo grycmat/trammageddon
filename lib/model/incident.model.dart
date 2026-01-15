@@ -10,6 +10,7 @@ class Incident {
   final String username;
   final String userId;
   final String city;
+  final int upvotes;
 
   Incident({
     this.id,
@@ -21,6 +22,7 @@ class Incident {
     required this.username,
     required this.userId,
     required this.city,
+    this.upvotes = 0,
   });
 
   Map<String, dynamic> toMap() {
@@ -33,6 +35,7 @@ class Incident {
       'username': username,
       'userId': userId,
       'city': city,
+      'upvotes': upvotes,
     };
   }
 
@@ -48,6 +51,7 @@ class Incident {
       username: data['username'] ?? '',
       userId: data['userId'] ?? '',
       city: data['city'] ?? '',
+      upvotes: data['upvotes'] ?? 0,
     );
   }
 }

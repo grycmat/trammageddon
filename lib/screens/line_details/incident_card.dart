@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:trammageddon/model/incident.model.dart';
 import 'package:intl/intl.dart';
+import 'package:trammageddon/model/incident.model.dart';
 
 class IncidentCard extends StatelessWidget {
   final Incident incident;
@@ -47,22 +47,10 @@ class IncidentCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: const Color(0xFF141414).withValues(alpha: 0.9),
         border: const Border(
-          left: BorderSide(
-            color: Color(0xFFEF4444),
-            width: 6,
-          ),
-          right: BorderSide(
-            color: Color(0xFF333333),
-            width: 2,
-          ),
-          top: BorderSide(
-            color: Color(0xFF333333),
-            width: 2,
-          ),
-          bottom: BorderSide(
-            color: Color(0xFF333333),
-            width: 2,
-          ),
+          left: BorderSide(color: Color(0xFFEF4444), width: 6),
+          right: BorderSide(color: Color(0xFF333333), width: 2),
+          top: BorderSide(color: Color(0xFF333333), width: 2),
+          bottom: BorderSide(color: Color(0xFF333333), width: 2),
         ),
       ),
       child: Stack(
@@ -107,10 +95,7 @@ class IncidentCard extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  height: 1,
-                  color: const Color(0xFF333333),
-                ),
+                Container(height: 1, color: const Color(0xFF333333)),
                 const SizedBox(height: 12),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -138,7 +123,7 @@ class IncidentCard extends StatelessWidget {
                           child: Row(
                             children: [
                               Icon(
-                                hasVoted ? Icons.check : Icons.thumb_up,
+                                hasVoted ? Icons.check : Icons.thunderstorm,
                                 size: 14,
                               ),
                               const SizedBox(width: 6),

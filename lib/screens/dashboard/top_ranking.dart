@@ -17,7 +17,8 @@ class TopRanking extends StatelessWidget {
     return FutureBuilder(
       future: getIt.get<IncidentService>().getTopRankings(),
       builder: (_, AsyncSnapshot<List<RankingItem>> snapshot) {
-        if (snapshot.connectionState == ConnectionState.active) {
+        if (snapshot.connectionState == ConnectionState.active ||
+            snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         }
         if (snapshot.hasData) {

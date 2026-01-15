@@ -6,7 +6,7 @@ import 'package:trammageddon/screens/dashboard/today_incidents_count.dart';
 import 'package:trammageddon/screens/dashboard/top_ranking.dart';
 
 class DashboardScreen extends StatelessWidget {
-  DashboardScreen({super.key});
+  const DashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
