@@ -6,6 +6,7 @@ import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/screens/add_incident/statement_frame.dart';
 import 'package:trammageddon/screens/dashboard/top_ranking_item.dart';
 import 'package:trammageddon/services/incident.service.dart';
+import 'package:trammageddon/widgets/app_progress_indicator.dart';
 
 var getIt = GetIt.I;
 
@@ -19,7 +20,7 @@ class TopRanking extends StatelessWidget {
       builder: (_, AsyncSnapshot<List<RankingItem>> snapshot) {
         if (snapshot.connectionState == ConnectionState.active ||
             snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const AppProgressIndicator();
         }
         if (snapshot.hasData) {
           final topRankings = snapshot.data;
