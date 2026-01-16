@@ -56,7 +56,22 @@ class IncidentCard extends StatelessWidget {
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(8.0),
+            child: RichText(
+              text: TextSpan(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  fontFamily: 'ChivoMono',
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                children: [
+                  const TextSpan(text: 'LINIA '),
+                  TextSpan(text: incident.line),
+                ],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 44, 16, 16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

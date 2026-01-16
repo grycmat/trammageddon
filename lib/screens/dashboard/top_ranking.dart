@@ -46,21 +46,21 @@ class TopRanking extends StatelessWidget {
                           line: entry.line,
                           reports: entry.incidentsCount,
                         ),
-                        if (index == topRankings.length)
-                          Container(
-                            height: 1,
-                            margin: const EdgeInsets.symmetric(vertical: 12),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Theme.of(context).colorScheme.onSurface
-                                      .withValues(alpha: 0.3),
-                                  width: 1,
-                                  style: BorderStyle.solid,
-                                ),
+                        Container(
+                          height: 1,
+                          margin: const EdgeInsets.symmetric(vertical: 12),
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(
+                                color: Theme.of(
+                                  context,
+                                ).colorScheme.onSurface.withValues(alpha: 0.3),
+                                width: 1,
+                                style: BorderStyle.solid,
                               ),
                             ),
                           ),
+                        ),
                       ],
                     ),
                 ],

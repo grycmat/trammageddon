@@ -17,7 +17,7 @@ class ScaffoldWithNav extends StatelessWidget {
   final AppBar? appBar = null;
   final skipAppBarRoutes = const [RouteNames.hallOfDefame, RouteNames.settings];
 
-  _shouldShowFab() => !skipAppBarRoutes.contains(routerState.fullPath);
+  bool _shouldShowFab() => !skipAppBarRoutes.contains(routerState.fullPath);
 
   @override
   Widget build(BuildContext context) {

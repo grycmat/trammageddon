@@ -4,7 +4,6 @@ import 'package:trammageddon/data/categories.dart';
 import 'package:trammageddon/model/category.model.dart';
 import 'package:trammageddon/model/ranking_item.model.dart';
 import 'package:trammageddon/screens/hall_of_defame/detailed_ranking_entry.dart';
-import 'package:trammageddon/screens/hall_of_defame/top_categories.dart';
 import 'package:trammageddon/services/incident.service.dart';
 
 var getIt = GetIt.I;
@@ -39,10 +38,10 @@ class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
     });
   }
 
-  _generateList(AsyncSnapshot<List<RankingItem>> snapshot) {
+  Widget _generateList(AsyncSnapshot<List<RankingItem>> snapshot) {
     var data = snapshot.data;
     if (data == null) {
-      return [Container()];
+      return Container();
     }
 
     var rank = 1;
@@ -104,7 +103,10 @@ class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
                               if (snapshot.connectionState ==
                                   ConnectionState.active)
                                 const CircularProgressIndicator(),
-                              if (snapshot.hasData) _generateList(snapshot) else Center(child: Text('PUSTO...')),
+                              if (snapshot.hasData)
+                                _generateList(snapshot)
+                              else
+                                Center(child: Text('PUSTO...')),
                             ],
                           );
                         },

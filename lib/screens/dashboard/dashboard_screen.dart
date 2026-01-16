@@ -15,13 +15,7 @@ class DashboardScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            'CO TAM W MIEŚCIE',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-            textAlign: TextAlign.center,
-          ),
+          AppBar(title: Text('CO TAM W MIEŚCIE')),
           const SizedBox(height: 12),
           Row(
             children: [

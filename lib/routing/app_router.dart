@@ -42,7 +42,7 @@ class AppRouter {
           GoRoute(
             path: RouteNames.home,
             name: 'home',
-            builder: (context, state) => DashboardScreen(),
+            builder: (context, state) => const DashboardScreen(),
           ),
 
           GoRoute(
