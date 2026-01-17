@@ -25,7 +25,8 @@ class LineDetailsScreen extends StatelessWidget {
             line: lineNumber,
           ),
           builder: (context, AsyncSnapshot<List<Incident>> asyncSnapshot) {
-            if (asyncSnapshot.connectionState == ConnectionState.waiting) {
+            if (asyncSnapshot.connectionState == ConnectionState.waiting ||
+                asyncSnapshot.connectionState == ConnectionState.active) {
               return const Center(child: CircularProgressIndicator());
             }
             if (asyncSnapshot.hasData) {

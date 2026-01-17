@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'package:trammageddon/data/tram_lines.dart';
 import 'package:trammageddon/model/incident.model.dart';
 import 'package:trammageddon/model/ranking_item.model.dart';
 import 'package:trammageddon/services/auth.service.dart';
@@ -22,8 +23,9 @@ class IncidentService {
 
       final lineRef = _firestore
           .collection(_incidentsByLine)
-          .doc(incident.line);
+          .doc(incident.lineId);
       batch.set(lineRef, {
+        'lineId': incident.lineId,
         'line': incident.line,
         'incidentsCount': FieldValue.increment(1),
       }, SetOptions(merge: true));
@@ -146,12 +148,15 @@ class IncidentService {
     }
   }
 
-  Future<List<Incident>> getIncidentsForLine({required String line}) async {
+  Future<List<Incident>> getIncidentsForLine({
+    required String line,
+    int limit = 100,
+  }) async {
     try {
       return await _firestore
           .collection(_incidents)
           .where('line', isEqualTo: line)
-          .limit(_incidentsByLineLimit)
+          .limit(limit)
           .get()
           .then(
             (response) => response.docs
@@ -178,5 +183,17 @@ class IncidentService {
     } catch (e) {
       throw Exception('Failed to fetch incidents: $e');
     }
+  }
+
+  Future<void> uploadLines() async {
+    final lines = kTramLines;
+    final batch = _firestore.batch();
+
+    final linesRef = _firestore.collection('lines');
+    for (final line in lines) {
+      linesRef.add(line.toMap());
+    }
+
+    await batch.commit();
   }
 }

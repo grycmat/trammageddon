@@ -4,13 +4,19 @@ class TramLine {
   final String? id;
   final String number;
   final String description;
+  final String city;
 
-  const TramLine({this.id, required this.number, required this.description});
+  const TramLine({
+    this.id,
+    required this.number,
+    required this.description,
+    required this.city,
+  });
 
   String get formatted => '$number - $description';
 
   Map<String, dynamic> toMap() {
-    return {'number': number, 'description': description};
+    return {'number': number, 'description': description, 'city': city};
   }
 
   factory TramLine.fromFirestore(DocumentSnapshot doc) {
@@ -19,6 +25,7 @@ class TramLine {
       id: doc.id,
       number: data['number'] ?? '',
       description: data['description'] ?? '',
+      city: data['city'] ?? '',
     );
   }
 }
