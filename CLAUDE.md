@@ -24,6 +24,10 @@ Trammageddon is a Flutter mobile application for reporting and tracking tram (pu
 - `cd android && gradlew.bat clean` - Clean Android build (Windows)
 - `cd android && gradlew.bat assembleDebug` - Build debug APK via Gradle
 
+### Asset Generation
+- `flutter pub run flutter_launcher_icons` - Regenerate app icons
+- `flutter pub run flutter_native_splash:create` - Regenerate splash screen
+
 ## Architecture
 
 ### Project Structure
@@ -44,7 +48,7 @@ Trammageddon is a Flutter mobile application for reporting and tracking tram (pu
 - `lib/routing/` - Navigation configuration
   - `app_router.dart` - GoRouter setup with auth redirects and ShellRoute
   - `route_names.dart` - Centralized route path constants
-- `lib/model/` - Data models (RankingItem, Incident, User, Category, City, TramLine)
+- `lib/model/` - Data models (RankingItem, Incident, IncidentByLine, User, Category, City, TramLine, Upvote)
 - `lib/services/` - Business logic services
   - `auth.service.dart` - Firebase Auth + SharedPreferences
   - `incident.service.dart` - Firestore incident operations
@@ -175,6 +179,9 @@ Key packages:
 - `firebase_core`, `firebase_auth`, `cloud_firestore` - Firebase backend
 - `shared_preferences: ^2.5.3` - Local user data persistence
 - `crypto: ^3.0.7` - Password hashing (SHA-256)
+- `intl: ^0.19.0` - Date/time formatting
+- `flutter_launcher_icons: ^0.14.4` - App icon generation
+- `flutter_native_splash: ^2.4.7` - Splash screen generation
 
 Fonts in `lib/assets/font/`:
 - Oswald (weights 200-700) - Headers
