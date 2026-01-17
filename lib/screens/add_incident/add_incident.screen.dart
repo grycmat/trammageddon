@@ -70,13 +70,12 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
       final isAnonymous = _authService.isAnonymous;
       final incident = Incident(
         line: _selectedLine!.number,
+        lineId: _selectedLine!.id ?? '',
         vehicleNumber: _vehicleNumberController.text.isNotEmpty
             ? _vehicleNumberController.text
             : null,
         description: _descriptionController.text,
-        categories: _selectedCategories
-            .map((c) => c.label)
-            .toList(),
+        categories: _selectedCategories.map((c) => c.label).toList(),
         timestamp: DateTime.now(),
         username: isAnonymous ? 'ANONIM' : _authService.username ?? '',
         userId: isAnonymous ? '' : _authService.userId ?? '',
