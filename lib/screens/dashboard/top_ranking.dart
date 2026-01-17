@@ -26,7 +26,7 @@ class TopRanking extends StatelessWidget {
           final topRankings = snapshot.data;
 
           if (topRankings == null) {
-            return Container();
+            return Center(child: Text('PUSTO...'));
           }
 
           var index = 1;

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
-import 'package:trammageddon/services/incident.service.dart';
+import 'package:go_router/go_router.dart';
+import 'package:trammageddon/routing/route_names.dart';
 
 class NewIncidentFab extends StatelessWidget {
   const NewIncidentFab({super.key, required this.show});
@@ -11,8 +11,7 @@ class NewIncidentFab extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       backgroundColor: Colors.transparent,
-      // onPressed: () => context.push(RouteNames.addIncident),
-      onPressed: () => GetIt.I.get<IncidentService>().uploadLines(),
+      onPressed: () => context.push(RouteNames.addIncident),
       label: AnimatedContainer(
         duration: Duration(milliseconds: 200),
         transform: Matrix4.identity()..rotateZ(-0.05),
