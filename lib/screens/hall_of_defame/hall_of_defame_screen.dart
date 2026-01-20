@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:trammageddon/data/categories.dart';
 import 'package:trammageddon/model/category.model.dart';
 import 'package:trammageddon/model/ranking_item.model.dart';
 import 'package:trammageddon/screens/hall_of_defame/detailed_ranking_entry.dart';
+import 'package:trammageddon/services/data_sync.service.dart';
 import 'package:trammageddon/services/incident.service.dart';
 
 var getIt = GetIt.I;
@@ -17,15 +17,20 @@ class HallOfDefameScreen extends StatefulWidget {
 
 class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
   final Set<Category> _selectedCategories = {};
+  final _dataSyncService = getIt.get<DataSyncService>();
+
+  List<Category> get _categories => _dataSyncService.categories;
 
   @override
   void initState() {
     super.initState();
-    final defaultCategory = kCategories.firstWhere(
-      (c) => c.label == 'BRAK OGRZEWANIA/KLIMATYZACJI',
-      orElse: () => kCategories.first,
-    );
-    _selectedCategories.add(defaultCategory);
+    if (_categories.isNotEmpty) {
+      final defaultCategory = _categories.firstWhere(
+        (c) => c.label == 'BRAK OGRZEWANIA/KLIMATYZACJI',
+        orElse: () => _categories.first,
+      );
+      _selectedCategories.add(defaultCategory);
+    }
   }
 
   void _toggleCategory(Category category) {

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:trammageddon/model/city.model.dart';
 import 'package:trammageddon/routing/route_names.dart';
 import 'package:trammageddon/screens/add_incident/app_dropdown.dart';
 import 'package:trammageddon/services/auth.service.dart';
+import 'package:trammageddon/services/data_sync.service.dart';
 import 'package:trammageddon/services/preferences.service.dart';
 import 'package:trammageddon/widgets/app_text_field.dart';
 import 'package:trammageddon/widgets/stamped_button.dart';
@@ -18,21 +20,24 @@ class SettingsScreen extends StatefulWidget {
 class _SettingsScreenState extends State<SettingsScreen> {
   final _usernameController = TextEditingController();
   final _authService = GetIt.I.get<AuthService>();
+  final _dataSyncService = GetIt.I.get<DataSyncService>();
   String? _selectedTheme;
-  String? _selectedCity;
+  City? _selectedCity;
   bool _isSaving = false;
   String _initialUsername = '';
 
   final List<String> _themeOptions = ['JASNY', 'CIEMNY', 'SYSTEMOWY'];
 
-  final List<String> _cityOptions = ['KRAKÓW'];
+  List<City> get _cities => _dataSyncService.cities;
 
   bool get _isAnonymous => _authService.isAnonymous;
 
   @override
   void initState() {
     super.initState();
-    _selectedCity = 'KRAKÓW';
+    if (_cities.isNotEmpty) {
+      _selectedCity = _cities.first;
+    }
     _usernameController.addListener(_onUsernameChanged);
     _loadUsername();
   }
@@ -268,11 +273,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                AppDropdown<String>(
+                AppDropdown<City>(
                   value: _selectedCity,
-                  items: _cityOptions,
+                  items: _cities,
                   hint: 'WYBIERZ MIASTO...',
-                  itemLabelBuilder: (item) => item,
+                  itemLabelBuilder: (item) => item.name,
                   onChanged: (value) {
                     setState(() {
                       _selectedCity = value;

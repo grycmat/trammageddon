@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
-import 'package:trammageddon/data/categories.dart';
-import 'package:trammageddon/data/tram_lines.dart';
 import 'package:trammageddon/model/category.model.dart';
 import 'package:trammageddon/model/incident.model.dart';
 import 'package:trammageddon/model/tram_line.model.dart';
@@ -12,6 +10,7 @@ import 'package:trammageddon/screens/add_incident/category_tag.dart';
 import 'package:trammageddon/screens/add_incident/statement_frame.dart';
 import 'package:trammageddon/screens/add_incident/wanted_border.dart';
 import 'package:trammageddon/services/auth.service.dart';
+import 'package:trammageddon/services/data_sync.service.dart';
 import 'package:trammageddon/services/incident.service.dart';
 import 'package:trammageddon/widgets/app_text_field.dart';
 import 'package:trammageddon/widgets/stamped_button.dart';
@@ -33,6 +32,13 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
   bool _isSubmitting = false;
   final _authService = getIt.get<AuthService>();
   final _incidentService = getIt.get<IncidentService>();
+  final _dataSyncService = getIt.get<DataSyncService>();
+
+  List<Category> get _categories => _dataSyncService.categories;
+  List<TramLine> get _tramLines => _dataSyncService.tramLines;
+  String get _selectedCity => _dataSyncService.cities.isNotEmpty
+      ? _dataSyncService.cities.first.name
+      : 'KRAKÓW';
 
   bool get _isFormValid {
     return _selectedLine != null && _descriptionController.text.isNotEmpty;
@@ -41,11 +47,13 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
   @override
   void initState() {
     super.initState();
-    final defaultCategory = kCategories.firstWhere(
-      (c) => c.label == 'BRAK OGRZEWANIA/KLIMATYZACJI',
-      orElse: () => kCategories.first,
-    );
-    _selectedCategories.add(defaultCategory);
+    if (_categories.isNotEmpty) {
+      final defaultCategory = _categories.firstWhere(
+        (c) => c.label == 'BRAK OGRZEWANIA/KLIMATYZACJI',
+        orElse: () => _categories.first,
+      );
+      _selectedCategories.add(defaultCategory);
+    }
 
     _descriptionController.addListener(() {
       setState(() {});
@@ -79,7 +87,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
         timestamp: DateTime.now(),
         username: isAnonymous ? 'ANONIM' : _authService.username ?? '',
         userId: isAnonymous ? '' : _authService.userId ?? '',
-        city: 'KRAKÓW',
+        city: _selectedCity,
       );
 
       await _incidentService.addIncident(incident);
@@ -168,7 +176,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                         const SizedBox(height: 8),
                         AppDropdown<TramLine>(
                           value: _selectedLine,
-                          items: kTramLines,
+                          items: _tramLines,
                           hint: 'WYBIERZ LINIĘ...',
                           itemLabelBuilder: (item) => item.formatted,
                           onChanged: (value) {
@@ -226,7 +234,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                   Wrap(
                     spacing: 12,
                     runSpacing: 12,
-                    children: kCategories.map((category) {
+                    children: _categories.map((category) {
                       return CategoryTag(
                         label: category.label,
                         isSelected: _selectedCategories.contains(category),

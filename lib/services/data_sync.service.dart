@@ -34,17 +34,29 @@ class DataSyncService {
   }
 
   Future<List<City>> downloadCities() async {
-    // TODO: Implement city download from Firestore
-    return [];
+    final snapshot = await _firestore
+        .collection(_citiesCollection)
+        .orderBy('index')
+        .get();
+    _cities = snapshot.docs.map((doc) => City.fromFirestore(doc)).toList();
+    return _cities;
   }
 
   Future<List<TramLine>> downloadTramLines() async {
-    // TODO: Implement tram lines download from Firestore
-    return [];
+    final snapshot = await _firestore
+        .collection(_linesCollection)
+        .orderBy('number')
+        .get();
+    _tramLines = snapshot.docs.map((doc) => TramLine.fromFirestore(doc)).toList();
+    return _tramLines;
   }
 
   Future<List<Category>> downloadCategories() async {
-    // TODO: Implement categories download from Firestore
-    return [];
+    final snapshot = await _firestore
+        .collection(_categoriesCollection)
+        .orderBy('index')
+        .get();
+    _categories = snapshot.docs.map((doc) => Category.fromFirestore(doc)).toList();
+    return _categories;
   }
 }
