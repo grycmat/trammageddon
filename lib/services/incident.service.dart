@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'package:trammageddon/data/categories.dart';
 import 'package:trammageddon/data/tram_lines.dart';
 import 'package:trammageddon/model/incident.model.dart';
 import 'package:trammageddon/model/ranking_item.model.dart';
@@ -194,6 +195,16 @@ class IncidentService {
       linesRef.add(line.toMap());
     }
 
+    await batch.commit();
+  }
+
+  Future<void> uploadCategories() async {
+    final categories = kCategories;
+    final batch = _firestore.batch();
+    final categoriesRef = _firestore.collection('categories');
+    for (final category in categories) {
+      categoriesRef.add(category.toMap());
+    }
     await batch.commit();
   }
 }
