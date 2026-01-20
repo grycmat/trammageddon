@@ -4,6 +4,7 @@ import 'package:trammageddon/model/incident.model.dart';
 import 'package:trammageddon/screens/line_details/incident_card.dart';
 import 'package:trammageddon/services/incident.service.dart';
 import 'package:trammageddon/widgets/app_progress_indicator.dart';
+import 'package:trammageddon/widgets/empty_list.dart';
 
 var getIt = GetIt.I;
 
@@ -21,6 +22,9 @@ class IncidentsListScreen extends StatelessWidget {
         }
         if (asyncSnapshot.hasData) {
           final incidents = asyncSnapshot.data!;
+          if (incidents.isEmpty) {
+            return const EmptyList();
+          }
           return ListView.builder(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
             itemCount: incidents.length,

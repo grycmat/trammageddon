@@ -5,6 +5,7 @@ import 'package:trammageddon/model/ranking_item.model.dart';
 import 'package:trammageddon/screens/hall_of_defame/detailed_ranking_entry.dart';
 import 'package:trammageddon/services/data_sync.service.dart';
 import 'package:trammageddon/services/incident.service.dart';
+import 'package:trammageddon/widgets/empty_list.dart';
 
 var getIt = GetIt.I;
 
@@ -112,10 +113,12 @@ class _HallOfDefameScreenState extends State<HallOfDefameScreen> {
                                 Center(
                                   child: const CircularProgressIndicator(),
                                 ),
-                              if (snapshot.hasData && snapshot.data != null)
+                              if (snapshot.hasData &&
+                                  snapshot.data != null &&
+                                  snapshot.data!.isNotEmpty)
                                 _generateList(snapshot)
                               else
-                                Center(child: Text('PUSTO...')),
+                                const EmptyList(),
                             ],
                           );
                         },

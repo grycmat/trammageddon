@@ -7,6 +7,7 @@ import 'package:trammageddon/screens/add_incident/statement_frame.dart';
 import 'package:trammageddon/screens/dashboard/top_ranking_item.dart';
 import 'package:trammageddon/services/incident.service.dart';
 import 'package:trammageddon/widgets/app_progress_indicator.dart';
+import 'package:trammageddon/widgets/empty_list.dart';
 
 var getIt = GetIt.I;
 
@@ -25,8 +26,8 @@ class TopRanking extends StatelessWidget {
         if (snapshot.hasData) {
           final topRankings = snapshot.data;
 
-          if (topRankings == null) {
-            return Center(child: Text('PUSTO...'));
+          if (topRankings == null || topRankings.isEmpty) {
+            return const EmptyList();
           }
 
           var index = 1;
