@@ -220,7 +220,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       AppTextField(
                         controller: _passwordController,
                         hintText: 'ZERO BEZPIECZEŃSTWA',
-                        keyboardType: TextInputType.visiblePassword,
+                        keyboardType: TextInputType.text,
+                        obscureText: true,
                       ),
                       const SizedBox(height: 32),
                       Row(

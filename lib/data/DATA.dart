@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:trammageddon/model/incident.model.dart';
-import 'package:trammageddon/model/incident_by_line.dart';
+import 'package:trammageddon/model/incident_by_line.model.dart';
 
 const String kSeedUserId = 'seed-user-001';
 const String kSeedUsername = 'trammageddon_tester@test.pl';
@@ -11,7 +11,8 @@ final List<Incident> kSeedIncidents = [
     line: '1',
     lineId: 'line_1',
     vehicleNumber: 'RK 2145',
-    description: 'TRAMWAJ WYGLADA JAK PO WOJNIE. SIEDZENIA BRUDNE, PODLOGA LEPKA.',
+    description:
+        'TRAMWAJ WYGLADA JAK PO WOJNIE. SIEDZENIA BRUDNE, PODLOGA LEPKA.',
     categories: ['BRUD I SMROD', 'WSZYSTKO NAJGORZEJ'],
     timestamp: DateTime(2025, 1, 15, 8, 30),
     username: kSeedUsername,
@@ -280,11 +281,9 @@ class SeedDataUploader {
   final FirebaseFirestore _firestore;
 
   SeedDataUploader({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+    : _firestore = firestore ?? FirebaseFirestore.instance;
 
-  Future<void> uploadAllSeedData({
-    bool clearExisting = false,
-  }) async {
+  Future<void> uploadAllSeedData({bool clearExisting = false}) async {
     if (clearExisting) {
       await _clearCollections();
     }
@@ -343,10 +342,7 @@ class SeedDataUploader {
 
     for (final entry in kSeedTopCategories.entries) {
       final docRef = collection.doc(_categoryToDocId(entry.key));
-      batch.set(docRef, {
-        'category': entry.key,
-        'count': entry.value,
-      });
+      batch.set(docRef, {'category': entry.key, 'count': entry.value});
     }
 
     await batch.commit();

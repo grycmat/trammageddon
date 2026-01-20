@@ -10,22 +10,35 @@ import 'package:trammageddon/screens/incidents_list/incidents_list_screen.dart';
 import 'package:trammageddon/screens/line_details/line_details_screen.dart';
 import 'package:trammageddon/screens/login/login.screen.dart';
 import 'package:trammageddon/screens/settings/settings_screen.dart';
+import 'package:trammageddon/screens/welcome/welcome_screen.dart';
 import 'package:trammageddon/services/auth.service.dart';
+import 'package:trammageddon/services/preferences.service.dart';
 
 final getIt = GetIt.I;
 
 class AppRouter {
   late final authService = getIt.get<AuthService>();
+  late final preferencesService = getIt.get<PreferencesService>();
   late final GoRouter router = GoRouter(
     debugLogDiagnostics: true,
     refreshListenable: authService,
-    initialLocation: RouteNames.login,
+    initialLocation: RouteNames.welcome,
 
     redirect: (BuildContext context, GoRouterState state) async {
+      final isOnboardingComplete = preferencesService.isOnboardingComplete();
       final userId = authService.userId;
       final isAnonymous = authService.isAnonymous;
+      final isWelcomeRoute = state.matchedLocation == RouteNames.welcome;
       final isLoginRoute = state.matchedLocation == RouteNames.login;
       final isAuthenticated = userId != null || isAnonymous;
+
+      if (!isOnboardingComplete && !isWelcomeRoute) {
+        return RouteNames.welcome;
+      }
+
+      if (isWelcomeRoute && isOnboardingComplete) {
+        return isAuthenticated ? RouteNames.home : RouteNames.login;
+      }
 
       if (isLoginRoute) {
         return isAuthenticated ? RouteNames.home : RouteNames.login;
@@ -77,6 +90,11 @@ class AppRouter {
         path: RouteNames.login,
         name: 'login',
         builder: (context, state) => const LoginScreen(),
+      ),
+      GoRoute(
+        path: RouteNames.welcome,
+        name: 'welcome',
+        builder: (context, state) => const WelcomeScreen(),
       ),
     ],
 

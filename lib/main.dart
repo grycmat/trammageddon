@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:trammageddon/firebase_options.dart';
 import 'package:trammageddon/routing/app_router.dart';
 import 'package:trammageddon/services/auth.service.dart';
+import 'package:trammageddon/services/data_sync.service.dart';
 import 'package:trammageddon/services/incident.service.dart';
 import 'package:trammageddon/services/preferences.service.dart';
 import 'package:trammageddon/theme/theme.dart';
@@ -19,6 +20,14 @@ void main() async {
   );
   getIt.registerSingletonAsync(
     () async => AuthService.init(getIt.get<PreferencesService>()),
+    dependsOn: [PreferencesService],
+  );
+  getIt.registerSingletonAsync(
+    () async {
+      final service = DataSyncService(getIt.get<PreferencesService>());
+      await service.downloadData();
+      return service;
+    },
     dependsOn: [PreferencesService],
   );
   await getIt.allReady();

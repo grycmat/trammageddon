@@ -14,6 +14,8 @@ class PreferencesService {
   final String _keyThemeMode = 'theme_mode';
   final String _keyUserId = 'user_id';
   final String _keyIsAnonymous = 'is_anonymous';
+  final String _keyOnboardingComplete = 'onboarding_complete';
+  final String _keyLastDataSync = 'last_data_sync';
 
   Future<void> saveUsername(String username) async {
     await _preferences.setString(_keyUsername, username);
@@ -53,5 +55,23 @@ class PreferencesService {
 
   Future<void> clearAll() async {
     await _preferences.clear();
+  }
+
+  Future<void> setOnboardingComplete() async {
+    await _preferences.setBool(_keyOnboardingComplete, true);
+  }
+
+  bool isOnboardingComplete() {
+    return _preferences.getBool(_keyOnboardingComplete) ?? false;
+  }
+
+  Future<void> setLastDataSync(DateTime dateTime) async {
+    await _preferences.setString(_keyLastDataSync, dateTime.toIso8601String());
+  }
+
+  DateTime? getLastDataSync() {
+    final value = _preferences.getString(_keyLastDataSync);
+    if (value == null) return null;
+    return DateTime.tryParse(value);
   }
 }
