@@ -163,40 +163,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary,
-                width: 3,
-              ),
-            ),
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'MOTYW',
-                  style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                AppDropdown<String>(
-                  value: _selectedTheme,
-                  items: _themeOptions,
-                  hint: 'WYBIERZ MOTYW...',
-                  itemLabelBuilder: (item) => item,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedTheme = value;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 24),
+          AppBar(title: Text("TAKIE TAM"), leading: SizedBox.shrink(),),
+          const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
               border: Border.all(
