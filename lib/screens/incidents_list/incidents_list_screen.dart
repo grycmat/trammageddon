@@ -13,34 +13,41 @@ class IncidentsListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: getIt.get<IncidentService>().getLastIncidents(),
-      builder: (context, AsyncSnapshot<List<Incident>> asyncSnapshot) {
-        if (asyncSnapshot.connectionState == ConnectionState.waiting ||
-            asyncSnapshot.connectionState == ConnectionState.active) {
-          return const AppProgressIndicator();
-        }
-        if (asyncSnapshot.hasData) {
-          final incidents = asyncSnapshot.data!;
-          if (incidents.isEmpty) {
-            return const EmptyList();
-          }
-          return ListView.builder(
-            padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
-            itemCount: incidents.length,
-            itemBuilder: (context, index) {
-              final item = incidents[index];
-              return IncidentCard(
-                incident: item,
-                upvotes: 0,
-                hasVoted: false,
-                onUpvote: () => {},
-              );
+    return Column(
+      children: [
+        AppBar(title: Text("OSTATNIE ŻALE"),),
+        Expanded(
+          child: FutureBuilder(
+            future: getIt.get<IncidentService>().getLastIncidents(),
+            builder: (context, AsyncSnapshot<List<Incident>> asyncSnapshot) {
+              if (asyncSnapshot.connectionState == ConnectionState.waiting ||
+                  asyncSnapshot.connectionState == ConnectionState.active) {
+                return const AppProgressIndicator();
+              }
+              if (asyncSnapshot.hasData) {
+                final incidents = asyncSnapshot.data!;
+                if (incidents.isEmpty) {
+                  return const EmptyList();
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 100),
+                  itemCount: incidents.length,
+                  itemBuilder: (context, index) {
+                    final item = incidents[index];
+                    return IncidentCard(
+                      incident: item,
+                      upvotes: 0,
+                      hasVoted: false,
+                      onUpvote: () => {},
+                    );
+                  },
+                );
+              }
+              return SizedBox.shrink();
             },
-          );
-        }
-        return SizedBox.shrink();
-      },
+          ),
+        ),
+      ],
     );
   }
 }

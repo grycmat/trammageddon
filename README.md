@@ -195,7 +195,6 @@ top_categories/
 The project includes seed data for development and testing in `lib/data/DATA.dart`:
 
 ```dart
-import 'package:trammageddon/data/DATA.dart';
 
 // Upload all seed data (optionally clear existing first)
 final uploader = SeedDataUploader();

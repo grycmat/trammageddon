@@ -42,26 +42,13 @@ class TopRanking extends StatelessWidget {
                   for (var entry in topRankings)
                     Column(
                       children: [
+
                         TopRankingItem(
                           rank: index++,
                           line: entry.line,
                           reports: entry.incidentsCount,
                         ),
-                        Container(
-                          height: 1,
-                          margin: const EdgeInsets.symmetric(vertical: 12),
-                          decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(
-                                color: Theme.of(
-                                  context,
-                                ).colorScheme.onSurface.withValues(alpha: 0.3),
-                                width: 1,
-                                style: BorderStyle.solid,
-                              ),
-                            ),
-                          ),
-                        ),
+                        const SizedBox(height: 8),
                       ],
                     ),
                 ],
