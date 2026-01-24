@@ -35,6 +35,7 @@ Trammageddon is a Flutter mobile application for reporting and tracking tram (pu
 - `lib/layout/` - Layout wrappers
   - `scaffold_with_nav.dart` - Scaffold wrapper providing persistent bottom navigation
 - `lib/screens/` - Screen-level widgets organized by feature
+  - `welcome/` - Onboarding/welcome screen
   - `login/` - Login/register screen with Firebase Auth
   - `add_incident/` - Incident reporting screen and related widgets
   - `dashboard/` - Dashboard screen with data visualization
@@ -53,7 +54,8 @@ Trammageddon is a Flutter mobile application for reporting and tracking tram (pu
   - `auth.service.dart` - Firebase Auth + SharedPreferences
   - `incident.service.dart` - Firestore incident operations
   - `preferences.service.dart` - SharedPreferences wrapper
-- `lib/data/` - Static lookup data (categories, tram_lines, cities)
+  - `data_sync.service.dart` - Downloads cities, lines, categories from Firestore
+- `lib/data/` - Static fallback data (categories.dart, LINES.dart, cities.dart) used when Firebase data unavailable
 
 ### State Management
 The app uses a multi-layered approach:
@@ -77,6 +79,14 @@ void main() async {
     () async => AuthService.init(getIt.get<PreferencesService>()),
     dependsOn: [PreferencesService],
   );
+  getIt.registerSingletonAsync(
+    () async {
+      final service = DataSyncService(getIt.get<PreferencesService>());
+      await service.downloadData();
+      return service;
+    },
+    dependsOn: [PreferencesService],
+  );
   await getIt.allReady();
   runApp(Trammageddon());
 }
@@ -85,9 +95,9 @@ void main() async {
 ### Routing System
 The app uses `go_router` with authentication guards:
 - `AuthService` extends `ChangeNotifier` and triggers route refreshes on auth state changes
-- Initial route is `/login` with redirect to `/` if authenticated
+- Initial route is `/welcome` for onboarding, then `/login`, then `/` (home) when authenticated
 - Uses `ShellRoute` pattern for persistent bottom navigation
-- Routes: `/login`, `/` (home), `/add-incident`, `/hall-of-defame`, `/settings`, `/line-details`
+- Routes: `/welcome`, `/login`, `/` (home), `/add-incident`, `/hall-of-defame`, `/settings`, `/line-details`, `/incidents-list`
 
 ### Theme System
 The app uses a custom brutalist design with:
@@ -109,25 +119,45 @@ Firebase services:
 incidents/
 ├── {docId}
 │   ├── line: "1"
+│   ├── lineId: "line_1"
 │   ├── vehicleNumber: "optional"
 │   ├── description: "..."
 │   ├── categories: ["BRUD", "ZIMNICA"]
 │   ├── timestamp: Timestamp
 │   ├── username: "user@email.com"
 │   ├── userId: "firebase-uid"
-│   └── city: "KRAKÓW"
+│   ├── city: "KRAKÓW"
+│   └── upvotes: 0
 
 incidents_by_line/
-├── {lineNumber}
+├── {lineId}
 │   ├── line: "1"
+│   ├── lineId: "line_1"
 │   └── incidentsCount: 42
 
 top_categories/
 ├── {categoryId}
-│   └── (category statistics)
+│   ├── category: "BRUD I SMROD"
+│   └── count: 15
+
+cities/                    # Synced by DataSyncService
+├── {docId}
+│   ├── index: 0
+│   └── name: "KRAKÓW"
+
+lines/                     # Synced by DataSyncService
+├── {docId}
+│   ├── number: "1"
+│   ├── description: "SALWATOR - WZGÓRZA KRZESŁAWICKIE"
+│   └── city: "KRAKÓW"
+
+categories/                # Synced by DataSyncService
+├── {docId}
+│   ├── index: 0
+│   └── label: "BRUD I SMRÓD"
 ```
 
-Incident creation uses batch writes to atomically update both `incidents` and `incidents_by_line` collections.
+Incident creation uses batch writes to atomically update both `incidents` and `incidents_by_line` collections. Static lookup data (cities, lines, categories) is synced from Firestore on app startup via `DataSyncService`.
 
 ### Platform-Specific
 - **Android**: Kotlin-based, uses Gradle KTS for build configuration
@@ -250,12 +280,14 @@ context.pop();
 
 ### Route Names
 Use constants from `RouteNames` class rather than hardcoded strings:
+- `RouteNames.welcome` → `/welcome`
 - `RouteNames.home` → `/`
 - `RouteNames.login` → `/login`
 - `RouteNames.addIncident` → `/add-incident`
 - `RouteNames.hallOfDefame` → `/hall-of-defame`
 - `RouteNames.settings` → `/settings`
 - `RouteNames.lineDetails` → `/line-details`
+- `RouteNames.incidentsList` → `/incidents-list`
 
 ## Adding New Features
 

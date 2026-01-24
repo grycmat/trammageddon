@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
+import 'package:trammageddon/data/LINES.dart';
 import 'package:trammageddon/data/categories.dart';
 import 'package:trammageddon/data/tram_lines.dart';
 import 'package:trammageddon/model/incident.model.dart';
@@ -187,7 +188,7 @@ class IncidentService {
   }
 
   Future<void> uploadLines() async {
-    final lines = kTramLines;
+    final lines = kLines;
     final batch = _firestore.batch();
 
     final linesRef = _firestore.collection('lines');

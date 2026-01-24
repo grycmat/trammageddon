@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:trammageddon/model/category.model.dart';
 import 'package:trammageddon/model/incident.model.dart';
 import 'package:trammageddon/model/tram_line.model.dart';
-import 'package:trammageddon/screens/add_incident/app_dropdown.dart';
 import 'package:trammageddon/screens/add_incident/app_text_area.dart';
 import 'package:trammageddon/screens/add_incident/category_tag.dart';
 import 'package:trammageddon/screens/add_incident/statement_frame.dart';
@@ -48,10 +47,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
   void initState() {
     super.initState();
     if (_categories.isNotEmpty) {
-      final defaultCategory = _categories.firstWhere(
-        (c) => c.label == 'BRAK OGRZEWANIA/KLIMATYZACJI',
-        orElse: () => _categories.first,
-      );
+      final defaultCategory = _categories.first;
       _selectedCategories.add(defaultCategory);
     }
 
@@ -167,23 +163,32 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                         ),
                         const SizedBox(height: 16),
                         Text(
-                          'LINIA TRAMWAJOWA*',
+                          'GRZESZNA LINIA*',
                           style: Theme.of(context).textTheme.titleSmall
                               ?.copyWith(
                                 color: Theme.of(context).colorScheme.primary,
                               ),
                         ),
                         const SizedBox(height: 8),
-                        AppDropdown<TramLine>(
-                          value: _selectedLine,
-                          items: _tramLines,
-                          hint: 'WYBIERZ LINIĘ...',
-                          itemLabelBuilder: (item) => item.formatted,
-                          onChanged: (value) {
+                        DropdownMenu(
+                          requestFocusOnTap: true,
+                          menuHeight: 400,
+                          hintText: "WYBIERZ LINIĘ...",
+                          enableSearch: true,
+                          enableFilter: true,
+                          onSelected: (item) {
                             setState(() {
-                              _selectedLine = value;
+                              _selectedLine = item;
                             });
                           },
+                          dropdownMenuEntries: _tramLines
+                              .map(
+                                (item) => DropdownMenuEntry(
+                                  value: item,
+                                  label: "${item.number} - ${item.description}",
+                                ),
+                              )
+                              .toList(),
                         ),
                         const SizedBox(height: 16),
                         Text(

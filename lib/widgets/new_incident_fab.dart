@@ -8,12 +8,12 @@ class NewIncidentFab extends StatelessWidget {
   final bool show;
   final _animationDuration = const Duration(milliseconds: 150);
 
-
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       backgroundColor: Colors.transparent,
       onPressed: () => context.push(RouteNames.addIncident),
+      // onPressed: () => GetIt.I.get<IncidentService>().uploadLines(),
       label: AnimatedContainer(
         duration: _animationDuration,
         transform: Matrix4.identity()..rotateZ(-0.05),

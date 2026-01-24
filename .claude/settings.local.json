@@ -8,7 +8,8 @@
       "mcp__context7__resolve-library-id",
       "mcp__context7__get-library-docs",
       "Bash(flutter build:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "WebFetch(domain:ztp.krakow.pl)"
     ],
     "deny": [],
     "ask": []
