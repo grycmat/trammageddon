@@ -13,7 +13,9 @@ class NewIncidentFab extends StatelessWidget {
     return FloatingActionButton.extended(
       backgroundColor: Colors.transparent,
       onPressed: () => context.push(RouteNames.addIncident),
+
       // onPressed: () => GetIt.I.get<IncidentService>().uploadLines(),
+      // onPressed: () => GetIt.I.get<IncidentService>().uploadCategories(),
       label: AnimatedContainer(
         duration: _animationDuration,
         transform: Matrix4.identity()..rotateZ(-0.05),

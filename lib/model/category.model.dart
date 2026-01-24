@@ -4,11 +4,17 @@ class Category {
   final String? id;
   final int index;
   final String label;
+  int incidentsCount;
 
-  const Category({this.id, required this.index, required this.label});
+  Category({
+    this.id,
+    required this.index,
+    required this.label,
+    this.incidentsCount = 0,
+  });
 
   Map<String, dynamic> toMap() {
-    return {'index': index, 'label': label};
+    return {'index': index, 'label': label, 'incidentsCount': incidentsCount};
   }
 
   factory Category.fromFirestore(DocumentSnapshot doc) {
@@ -17,6 +23,7 @@ class Category {
       id: doc.id,
       index: data['index'] ?? 0,
       label: data['label'] ?? '',
+      incidentsCount: data['incidentsCount'] ?? 0,
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get_it/get_it.dart';
 import 'package:trammageddon/data/LINES.dart';
 import 'package:trammageddon/data/categories.dart';
+import 'package:trammageddon/model/category.model.dart';
 import 'package:trammageddon/model/incident.model.dart';
 import 'package:trammageddon/model/ranking_item.model.dart';
 import 'package:trammageddon/services/auth.service.dart';
@@ -13,18 +14,30 @@ class IncidentService {
   final String _incidents = 'incidents';
   final String _incidentsByLine = 'incidents_by_line';
   final String _topCategories = 'top_categories';
+  final String _categories = 'categories';
   final int _incidentsByLineLimit = 100;
 
-  Future<void> addIncident(Incident incident) async {
+  Future<void> addIncident(Incident incident, Set<Category> categories) async {
     try {
       final batch = _firestore.batch();
 
       final incidentRef = _firestore.collection(_incidents).doc();
+      final categoriesCollection = _firestore.collection(_topCategories);
+
+      for (var category in categories) {
+        final categoriesRef = categoriesCollection.doc(category.id);
+
+        batch.set(categoriesRef, {
+          'incidentsCount': FieldValue.increment(1),
+        }, SetOptions(merge: true));
+      }
+
       batch.set(incidentRef, incident.toMap());
 
       final lineRef = _firestore
           .collection(_incidentsByLine)
           .doc(incident.lineId);
+
       batch.set(lineRef, {
         'lineId': incident.lineId,
         'line': incident.line,
@@ -201,7 +214,7 @@ class IncidentService {
   Future<void> uploadCategories() async {
     final categories = kCategories;
     final batch = _firestore.batch();
-    final categoriesRef = _firestore.collection('categories');
+    final categoriesRef = _firestore.collection(_categories);
     for (final category in categories) {
       categoriesRef.add(category.toMap());
     }

@@ -1,6 +1,6 @@
 import 'package:trammageddon/model/category.model.dart';
 
-const List<Category>  kCategories = [
+List<Category> kCategories = [
   Category(index: 0, label: 'BRUD I SMRÓD'),
   Category(index: 1, label: 'UKROP'),
   Category(index: 2, label: 'ZIMNICA'),

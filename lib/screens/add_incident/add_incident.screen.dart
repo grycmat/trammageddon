@@ -86,7 +86,7 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
         city: _selectedCity,
       );
 
-      await _incidentService.addIncident(incident);
+      await _incidentService.addIncident(incident, _selectedCategories);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
