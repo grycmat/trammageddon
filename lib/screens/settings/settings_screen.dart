@@ -21,12 +21,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
   final _usernameController = TextEditingController();
   final _authService = GetIt.I.get<AuthService>();
   final _dataSyncService = GetIt.I.get<DataSyncService>();
-  String? _selectedTheme;
   City? _selectedCity;
   bool _isSaving = false;
   String _initialUsername = '';
-
-  final List<String> _themeOptions = ['JASNY', 'CIEMNY', 'SYSTEMOWY'];
 
   List<City> get _cities => _dataSyncService.cities;
 
@@ -88,8 +85,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
     });
 
     try {
-      final preferenceService = GetIt.I.get<PreferencesService>();
-      await preferenceService.saveUsername(newUsername);
+      final preferenceService = GetIt.I.get<AuthService>();
+      await preferenceService.updateUsername(newUsername);
 
       setState(() {
         _initialUsername = newUsername;
@@ -163,7 +160,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          AppBar(title: Text("TAKIE TAM"), leading: SizedBox.shrink(),),
+          AppBar(title: Text("TAKIE TAM"), leading: SizedBox.shrink()),
           const SizedBox(height: 8),
           Container(
             decoration: BoxDecoration(
@@ -248,7 +245,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   itemLabelBuilder: (item) => item.name,
                   onChanged: (value) {
                     setState(() {
-                      _selectedCity = value;
+                      // _selectedCity = value;
                     });
                   },
                 ),

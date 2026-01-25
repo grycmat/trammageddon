@@ -81,8 +81,8 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
         description: _descriptionController.text,
         categories: _selectedCategories.map((c) => c.label).toList(),
         timestamp: DateTime.now(),
-        username: isAnonymous ? 'ANONIM' : _authService.username ?? '',
-        userId: isAnonymous ? '' : _authService.userId ?? '',
+        username: isAnonymous ? 'ANONIM' : _authService.username!,
+        userId: _authService.userId!,
         city: _selectedCity,
       );
 

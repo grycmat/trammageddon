@@ -22,7 +22,7 @@ class IncidentService {
       final batch = _firestore.batch();
 
       final incidentRef = _firestore.collection(_incidents).doc();
-      final categoriesCollection = _firestore.collection(_topCategories);
+      final categoriesCollection = _firestore.collection(_categories);
 
       for (var category in categories) {
         final categoriesRef = categoriesCollection.doc(category.id);
@@ -39,8 +39,6 @@ class IncidentService {
           .doc(incident.lineId);
 
       batch.set(lineRef, {
-        'lineId': incident.lineId,
-        'line': incident.line,
         'incidentsCount': FieldValue.increment(1),
       }, SetOptions(merge: true));
 

@@ -55,9 +55,11 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> loginAnonymously() async {
+    final credentials = await _firebaseAuth.signInAnonymously();
+    _userId = credentials.user!.uid;
+
     _isAnonymous = true;
     _username = null;
-    _userId = null;
     await _preferencesService.saveIsAnonymous(true);
     notifyListeners();
   }
@@ -72,8 +74,19 @@ class AuthService extends ChangeNotifier {
   }
 
   Future<void> updateUsername(String username) async {
+    if (_updateUsernameLocked(username)) {
+      return;
+    }
+
+    await _firebaseAuth.currentUser!.updateDisplayName(username);
     await _preferencesService.saveUsername(username);
     _username = username;
     notifyListeners();
   }
+
+  bool _updateUsernameLocked(String username) =>
+      username.isEmpty ||
+      username == _username ||
+      _isAnonymous ||
+      _firebaseAuth.currentUser == null;
 }
