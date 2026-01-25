@@ -9,7 +9,8 @@
       "mcp__context7__get-library-docs",
       "Bash(flutter build:*)",
       "Bash(git commit:*)",
-      "WebFetch(domain:ztp.krakow.pl)"
+      "WebFetch(domain:ztp.krakow.pl)",
+      "Bash(flutter test:*)"
     ],
     "deny": [],
     "ask": []
