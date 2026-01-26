@@ -27,9 +27,9 @@ class IncidentService {
       for (var category in categories) {
         final categoriesRef = categoriesCollection.doc(category.id);
 
-        batch.set(categoriesRef, {
+        batch.update(categoriesRef, {
           'incidentsCount': FieldValue.increment(1),
-        }, SetOptions(merge: true));
+        });
       }
 
       batch.set(incidentRef, incident.toMap());
@@ -38,9 +38,7 @@ class IncidentService {
           .collection(_incidentsByLine)
           .doc(incident.lineId);
 
-      batch.set(lineRef, {
-        'incidentsCount': FieldValue.increment(1),
-      }, SetOptions(merge: true));
+      batch.update(lineRef, {'incidentsCount': FieldValue.increment(1)});
 
       await batch.commit();
     } catch (e) {
