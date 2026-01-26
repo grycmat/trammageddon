@@ -26,6 +26,7 @@ class AddIncidentScreen extends StatefulWidget {
 class _AddIncidentScreenState extends State<AddIncidentScreen> {
   final _vehicleNumberController = TextEditingController();
   final _descriptionController = TextEditingController();
+  final _selectedLineController = TextEditingController();
   TramLine? _selectedLine;
   final Set<Category> _selectedCategories = {};
   bool _isSubmitting = false;
@@ -54,6 +55,14 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
     _descriptionController.addListener(() {
       setState(() {});
     });
+  }
+
+  @override
+  void dispose() {
+    _selectedLineController.dispose();
+    _vehicleNumberController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
   }
 
   void _toggleCategory(Category category) {
@@ -172,11 +181,18 @@ class _AddIncidentScreenState extends State<AddIncidentScreen> {
                         const SizedBox(height: 8),
                         DropdownMenu(
                           requestFocusOnTap: true,
+                          closeBehavior: DropdownMenuCloseBehavior.all,
+                          controller: _selectedLineController,
+                          keyboardType: TextInputType.number,
+                          enabled: true,
                           menuHeight: 400,
                           hintText: "WYBIERZ LINIĘ...",
                           enableSearch: true,
                           enableFilter: true,
                           onSelected: (item) {
+                            FocusScope.of(context).unfocus();
+                            _selectedLineController.text =
+                                "${item!.number} - ${item.description}";
                             setState(() {
                               _selectedLine = item;
                             });

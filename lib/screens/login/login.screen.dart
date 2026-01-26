@@ -65,6 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
         await authService.register(
           _emailController.text,
           _passwordController.text,
+          _usernameController.text,
         );
       } else {
         await authService.login(

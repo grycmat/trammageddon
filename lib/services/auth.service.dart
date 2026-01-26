@@ -33,7 +33,7 @@ class AuthService extends ChangeNotifier {
         password: password,
       );
 
-      _username = credential.user!.email;
+      _username = credential.user!.displayName;
       _userId = credential.user!.uid;
       await _preferencesService.saveUsername(_username!);
       await _preferencesService.saveUserId(_userId!);
@@ -41,13 +41,18 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  Future<void> register(String emailAddress, String password) async {
+  Future<void> register(
+    String emailAddress,
+    String password,
+    String displayName,
+  ) async {
     final credential = await _firebaseAuth.createUserWithEmailAndPassword(
       email: emailAddress,
       password: password,
     );
+    await _firebaseAuth.currentUser!.updateDisplayName(displayName);
 
-    _username = credential.user!.email;
+    _username = displayName;
     _userId = credential.user!.uid;
     await _preferencesService.saveUsername(_username!);
     await _preferencesService.saveUserId(_userId!);
@@ -59,8 +64,10 @@ class AuthService extends ChangeNotifier {
     _userId = credentials.user!.uid;
 
     _isAnonymous = true;
-    _username = null;
+    _username = 'ANONIM';
     await _preferencesService.saveIsAnonymous(true);
+    await _preferencesService.saveUsername(_username!);
+    await _preferencesService.saveUserId(_userId!);
     notifyListeners();
   }
 

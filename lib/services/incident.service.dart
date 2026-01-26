@@ -38,7 +38,11 @@ class IncidentService {
           .collection(_incidentsByLine)
           .doc(incident.lineId);
 
-      batch.update(lineRef, {'incidentsCount': FieldValue.increment(1)});
+      batch.set(lineRef, {
+        'line': incident.line,
+        'lineId': incident.lineId,
+        'incidentsCount': FieldValue.increment(1),
+      });
 
       await batch.commit();
     } catch (e) {
